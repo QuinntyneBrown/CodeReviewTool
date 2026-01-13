@@ -2,7 +2,7 @@
 ## CodeReviewTool System
 
 **Document Version:** 1.0
-**Date:** 2026-01--13
+**Date:** 2026-01-13
 **Status:** Final
 
 ---
@@ -59,10 +59,18 @@ namespace {AppName}.Core;  // Does not match file location
 **REQ-SYS-011**: The frontend SHALL use the default Angular Material colours and theme. No new colours are to be introduced.
 
 ### 2.2 Backend Project Structure
-**REQ-SYS-002**: The Backend SHALL consist of exactly three (3) projects:
-- CodeReviewTool.Core
-- CodeReviewTool.Infrastructure
-- CodeReviewTool.Api
+**REQ-SYS-002**: The Backend SHALL be implemented using a Microservices architecture.
+
+**REQ-SYS-002-A**: Each microservice SHALL be independently deployable and SHALL own its data.
+
+**REQ-SYS-002-B**: Each microservice SHOULD map to a bounded context.
+
+**REQ-SYS-002-C**: Each microservice SHALL follow a three-project structure:
+- {ServiceName}.Core
+- {ServiceName}.Infrastructure
+- {ServiceName}.Api
+
+**REQ-SYS-002-D**: Where this document references `CodeReviewTool.Core`, `CodeReviewTool.Infrastructure`, and `CodeReviewTool.Api`, it SHALL be interpreted as the per-microservice equivalents using the `{ServiceName}` prefix.
 
 ### 2.3 Object Mapping
 **REQ-SYS-003**: The system SHALL NOT use AutoMapper for object mapping.
@@ -136,6 +144,16 @@ Id
 **REQ-SYS-029**: All command handlers that create entities SHALL inject `ITenantContext` and pass the TenantId to entity constructors.
 
 **REQ-SYS-030**: The database schema SHALL include TenantId as a non-nullable column on all aggregate tables.
+
+
+### 2.12 Messaging (Microservices)
+**REQ-SYS-031**: Inter-service communication SHALL be implemented via asynchronous messaging.
+
+**REQ-SYS-032**: Messaging (message envelopes, serialization, schema evolution rules, channel naming, type registry, header peeking, subscriptions, routing, background workers, retry/idempotency, cycle detection, and observability) MUST be implemented according to the specifications in:
+- `docs/specs/message-design.spec.md`
+- `docs/specs/subscription-design.spec.md`
+
+**REQ-SYS-033**: Any messaging implementation details not explicitly specified in this document SHALL defer to the messaging specifications listed in REQ-SYS-032.
 
 
 ---
