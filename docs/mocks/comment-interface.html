@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Review Tool - Comment Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            padding: 16px;
+        }
+
+        .review-interface {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .review-interface__code {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .review-interface__line {
+            display: flex;
+            min-height: 21px;
+            position: relative;
+        }
+
+        .review-interface__line:hover .review-interface__add-comment {
+            opacity: 1;
+        }
+
+        .review-interface__line-number {
+            width: 50px;
+            padding: 0 8px;
+            text-align: right;
+            color: #6d6d6d;
+            background-color: #1e1e1e;
+            border-right: 1px solid #3d3d3d;
+            flex-shrink: 0;
+            user-select: none;
+            position: relative;
+        }
+
+        .review-interface__add-comment {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            color: #bb86fc;
+            font-size: 16px;
+        }
+
+        .review-interface__add-comment:hover {
+            color: #d0a9ff;
+        }
+
+        .review-interface__line-content {
+            flex: 1;
+            padding: 0 12px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .review-interface__line--added {
+            background-color: rgba(76, 175, 80, 0.15);
+        }
+
+        .review-interface__line--added .review-interface__line-content {
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .review-interface__line--commented {
+            background-color: rgba(187, 134, 252, 0.1);
+        }
+
+        .review-interface__comment-thread {
+            background-color: #252525;
+            border-left: 3px solid #bb86fc;
+            margin: 8px 0;
+            padding: 16px;
+        }
+
+        .review-interface__comment {
+            margin-bottom: 16px;
+        }
+
+        .review-interface__comment:last-child {
+            margin-bottom: 0;
+        }
+
+        .review-interface__comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .review-interface__comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #bb86fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000000;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .review-interface__comment-author {
+            font-size: 14px;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .review-interface__comment-time {
+            font-size: 12px;
+            color: #b0b0b0;
+        }
+
+        .review-interface__comment-body {
+            font-size: 14px;
+            color: #e0e0e0;
+            line-height: 1.5;
+            margin-left: 40px;
+        }
+
+        .review-interface__comment-form {
+            background-color: #2d2d2d;
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .review-interface__comment-input {
+            width: 100%;
+            background-color: #1e1e1e;
+            border: 1px solid #3d3d3d;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 14px;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 12px;
+        }
+
+        .review-interface__comment-input:focus {
+            outline: none;
+            border-color: #bb86fc;
+        }
+
+        .review-interface__comment-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .review-interface__button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: none;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .review-interface__button--secondary {
+            background-color: transparent;
+            color: #bb86fc;
+        }
+
+        .review-interface__button--secondary:hover {
+            background-color: rgba(187, 134, 252, 0.08);
+        }
+
+        .review-interface__button--primary {
+            background-color: #bb86fc;
+            color: #000000;
+        }
+
+        .review-interface__button--primary:hover {
+            background-color: #d0a9ff;
+        }
+
+        .review-interface__resolved-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .material-icons {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="review-interface">
+        <div class="review-interface__code">
+            <!-- Line 12 - Context -->
+            <div class="review-interface__line">
+                <div class="review-interface__line-number">
+                    12
+                    <span class="material-icons review-interface__add-comment">add_comment</span>
+                </div>
+                <div class="review-interface__line-content">  private _authService = inject(AuthService);</div>
+            </div>
+
+            <!-- Line 13 - Context -->
+            <div class="review-interface__line">
+                <div class="review-interface__line-number">
+                    13
+                    <span class="material-icons review-interface__add-comment">add_comment</span>
+                </div>
+                <div class="review-interface__line-content">  private _router = inject(Router);</div>
+            </div>
+
+            <!-- Line 14 - Added with Comment -->
+            <div class="review-interface__line review-interface__line--added review-interface__line--commented">
+                <div class="review-interface__line-number">
+                    14
+                    <span class="material-icons review-interface__add-comment">add_comment</span>
+                </div>
+                <div class="review-interface__line-content">+  isLoggedIn$ = this._authService.isAuthenticated$;</div>
+            </div>
+
+            <!-- Comment Thread -->
+            <div class="review-interface__comment-thread">
+                <div class="review-interface__comment">
+                    <div class="review-interface__comment-header">
+                        <div class="review-interface__comment-avatar">JD</div>
+                        <span class="review-interface__comment-author">John Doe</span>
+                        <span class="review-interface__comment-time">2 hours ago</span>
+                    </div>
+                    <div class="review-interface__comment-body">
+                        Great improvement! Using observables with the async pipe is much better than manual subscriptions. This follows the reactive pattern correctly.
+                    </div>
+                </div>
+
+                <div class="review-interface__comment">
+                    <div class="review-interface__comment-header">
+                        <div class="review-interface__comment-avatar">AS</div>
+                        <span class="review-interface__comment-author">Alice Smith</span>
+                        <span class="review-interface__comment-time">1 hour ago</span>
+                        <span class="review-interface__resolved-badge">
+                            <span class="material-icons">check_circle</span>
+                            Resolved
+                        </span>
+                    </div>
+                    <div class="review-interface__comment-body">
+                        Agreed! Make sure to also update the template to use the async pipe.
+                    </div>
+                </div>
+
+                <div class="review-interface__comment-form">
+                    <textarea 
+                        class="review-interface__comment-input" 
+                        placeholder="Add a reply..."
+                    ></textarea>
+                    <div class="review-interface__comment-actions">
+                        <button class="review-interface__button review-interface__button--secondary">
+                            Cancel
+                        </button>
+                        <button class="review-interface__button review-interface__button--primary">
+                            Reply
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line 15 - Added -->
+            <div class="review-interface__line review-interface__line--added">
+                <div class="review-interface__line-number">
+                    15
+                    <span class="material-icons review-interface__add-comment">add_comment</span>
+                </div>
+                <div class="review-interface__line-content">+  user$ = this._authService.currentUser$;</div>
+            </div>
+
+            <!-- Line 16 - Context -->
+            <div class="review-interface__line">
+                <div class="review-interface__line-number">
+                    16
+                    <span class="material-icons review-interface__add-comment">add_comment</span>
+                </div>
+                <div class="review-interface__line-content"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
