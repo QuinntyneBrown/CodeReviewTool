@@ -36,8 +36,10 @@ describe('HttpService', () => {
       targetBranch: 'feature/test',
     };
 
-    service.compareRepositories(request).subscribe(response => {
-      expect(response).toBeUndefined();
+    service.compareRepositories(request).subscribe({
+      next: response => {
+        expect(response).toBeUndefined();
+      }
     });
 
     const req = httpMock.expectOne('http://localhost:5000/api/compare');
@@ -58,12 +60,12 @@ describe('HttpService', () => {
       targetBranch: 'feature/test',
     };
 
-    service.compareRepositories(request).subscribe(
-      () => fail('Should have failed'),
-      error => {
+    service.compareRepositories(request).subscribe({
+      next: () => fail('Should have failed'),
+      error: error => {
         expect(error.status).toBe(500);
       }
-    );
+    });
 
     const req = httpMock.expectOne('http://localhost:5000/api/compare');
     req.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
