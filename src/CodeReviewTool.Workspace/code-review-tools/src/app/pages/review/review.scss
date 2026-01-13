@@ -1,0 +1,13 @@
+.review {
+  min-height: 100vh;
+  padding: 16px;
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    font-size: 18px;
+    color: #bb86fc;
+  }
+}

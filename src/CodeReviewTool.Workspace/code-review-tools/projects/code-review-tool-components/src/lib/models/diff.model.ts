@@ -16,7 +16,7 @@ export interface DiffHunk {
   lines: DiffLine[];
 }
 
-export interface CodeComment {
+export interface CommentData {
   commentId: string;
   lineNumber: number;
   author: string;
@@ -24,5 +24,5 @@ export interface CodeComment {
   timestamp: Date;
   content: string;
   resolved: boolean;
-  replies?: CodeComment[];
+  replies?: CommentData[];
 }
