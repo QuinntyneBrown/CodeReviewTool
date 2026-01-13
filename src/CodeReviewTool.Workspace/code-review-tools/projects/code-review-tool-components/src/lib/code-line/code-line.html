@@ -1,0 +1,15 @@
+<div class="code-line">
+  <div class="code-line__number">
+    {{ line().lineNumber }}
+    @if (showCommentButton()) {
+      <button 
+        class="code-line__add-comment"
+        (click)="onAddComment()"
+        [class.code-line__add-comment--visible]="hasComment()"
+      >
+        <mat-icon>add_comment</mat-icon>
+      </button>
+    }
+  </div>
+  <div class="code-line__content">{{ line().content }}</div>
+</div>

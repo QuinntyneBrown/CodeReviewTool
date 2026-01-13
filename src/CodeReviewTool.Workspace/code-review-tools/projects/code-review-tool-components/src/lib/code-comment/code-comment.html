@@ -1,0 +1,52 @@
+<div class="code-comment">
+  <div class="code-comment__header">
+    <div class="code-comment__avatar">{{ comment().authorInitials }}</div>
+    <span class="code-comment__author">{{ comment().author }}</span>
+    <span class="code-comment__time">{{ formatTimestamp(comment().timestamp) }}</span>
+    @if (comment().resolved) {
+      <mat-chip class="code-comment__resolved-badge" highlighted>
+        <mat-icon>check_circle</mat-icon>
+        Resolved
+      </mat-chip>
+    }
+  </div>
+  <div class="code-comment__body">{{ comment().content }}</div>
+
+  @if (comment().replies && comment().replies!.length > 0) {
+    <div class="code-comment__replies">
+      @for (reply of comment().replies; track reply.commentId) {
+        <crt-code-comment 
+          [comment]="reply"
+          [isReplyFormVisible]="false"
+        />
+      }
+    </div>
+  }
+
+  @if (isReplyFormVisible()) {
+    <div class="code-comment__reply-form">
+      <textarea 
+        class="code-comment__reply-input"
+        [(ngModel)]="replyText"
+        placeholder="Add a reply..."
+      ></textarea>
+      <div class="code-comment__reply-actions">
+        @if (!comment().resolved) {
+          <button mat-button (click)="onResolve()">
+            <mat-icon>check_circle</mat-icon>
+            Resolve
+          </button>
+        }
+        <button mat-button (click)="replyText = ''">Cancel</button>
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="onReply()"
+          [disabled]="!replyText.trim()"
+        >
+          Reply
+        </button>
+      </div>
+    </div>
+  }
+</div>

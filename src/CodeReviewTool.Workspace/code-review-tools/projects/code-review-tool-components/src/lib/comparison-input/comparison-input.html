@@ -1,0 +1,65 @@
+<div class="comparison-input">
+  <div class="comparison-input__header">
+    <h1 class="comparison-input__title">
+      <mat-icon>code</mat-icon>
+      Code Comparison
+    </h1>
+    <p class="comparison-input__subtitle">Compare branches to review code changes</p>
+  </div>
+
+  <form class="comparison-input__form" (ngSubmit)="onCompare()">
+    <mat-form-field class="comparison-input__field" appearance="outline">
+      <mat-label>Repository Path</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="repositoryPath" 
+        name="repositoryPath"
+        placeholder="/path/to/repository"
+        required
+      >
+      <mat-hint>Enter the local file system path to your Git repository</mat-hint>
+    </mat-form-field>
+
+    <div class="comparison-input__branch-group">
+      <mat-form-field class="comparison-input__field" appearance="outline">
+        <mat-label>Source Branch</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="sourceBranch" 
+          name="sourceBranch"
+          placeholder="main"
+          required
+        >
+      </mat-form-field>
+
+      <mat-form-field class="comparison-input__field" appearance="outline">
+        <mat-label>Target Branch</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="targetBranch" 
+          name="targetBranch"
+          placeholder="feature/new-feature"
+          required
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="comparison-input__actions">
+      <button 
+        type="button" 
+        mat-stroked-button 
+        (click)="onClear()"
+      >
+        Clear
+      </button>
+      <button 
+        type="submit" 
+        mat-raised-button 
+        color="primary"
+        [disabled]="!repositoryPath || !sourceBranch || !targetBranch"
+      >
+        Compare
+      </button>
+    </div>
+  </form>
+</div>

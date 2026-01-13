@@ -1,0 +1,55 @@
+<div class="diff-viewer">
+  <div class="diff-viewer__header">
+    <div class="diff-viewer__title">
+      <mat-icon>compare_arrows</mat-icon>
+      {{ targetBranch() }} vs {{ sourceBranch() }}
+    </div>
+    <div class="diff-viewer__stats">
+      <div class="diff-viewer__stat diff-viewer__stat--added">
+        <mat-icon>add</mat-icon>
+        <span>{{ totalAdditions }}</span>
+      </div>
+      <div class="diff-viewer__stat diff-viewer__stat--removed">
+        <mat-icon>remove</mat-icon>
+        <span>{{ totalDeletions }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="diff-viewer__content">
+    <div class="diff-viewer__file-list">
+      <mat-list>
+        @for (file of files(); track file.fileName) {
+          <mat-list-item 
+            class="diff-viewer__file-item"
+            [class.diff-viewer__file-item--active]="selectedFile === file"
+            (click)="selectFile(file)"
+          >
+            <div class="diff-viewer__file-name">{{ file.fileName }}</div>
+            <div class="diff-viewer__file-changes">
+              +{{ file.additions }} -{{ file.deletions }}
+            </div>
+          </mat-list-item>
+        }
+      </mat-list>
+    </div>
+
+    <div class="diff-viewer__code-panel">
+      @if (selectedFile) {
+        <div class="diff-viewer__code">
+          @for (line of selectedFile.changes; track line.lineNumber) {
+            <crt-code-line 
+              [line]="line"
+              [class]="getLineClass(line)"
+            />
+          }
+        </div>
+      } @else {
+        <div class="diff-viewer__empty-state">
+          <mat-icon>folder_open</mat-icon>
+          <p>Select a file to view changes</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

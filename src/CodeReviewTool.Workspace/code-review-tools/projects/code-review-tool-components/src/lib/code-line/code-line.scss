@@ -1,0 +1,59 @@
+.code-line {
+  display: flex;
+  min-height: 21px;
+  position: relative;
+
+  &:hover &__add-comment {
+    opacity: 1;
+  }
+
+  &__number {
+    width: 50px;
+    padding: 0 8px;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    flex-shrink: 0;
+    user-select: none;
+    position: relative;
+  }
+
+  &__add-comment {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--mat-sys-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: var(--mat-sys-primary-container);
+    }
+
+    &--visible {
+      opacity: 1;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    padding: 0 12px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+}
