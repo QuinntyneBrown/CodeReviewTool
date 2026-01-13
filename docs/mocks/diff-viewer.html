@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Review Tool - Diff Viewer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            padding: 16px;
+        }
+
+        .diff-viewer {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .diff-viewer__header {
+            background-color: #252525;
+            padding: 16px 24px;
+            border-bottom: 1px solid #3d3d3d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .diff-viewer__title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #bb86fc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .diff-viewer__stats {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+        }
+
+        .diff-viewer__stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .diff-viewer__stat--added {
+            color: #4caf50;
+        }
+
+        .diff-viewer__stat--removed {
+            color: #f44336;
+        }
+
+        .diff-viewer__content {
+            display: flex;
+            height: calc(100vh - 200px);
+        }
+
+        .diff-viewer__file-list {
+            width: 300px;
+            background-color: #252525;
+            border-right: 1px solid #3d3d3d;
+            overflow-y: auto;
+        }
+
+        .diff-viewer__file-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #3d3d3d;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .diff-viewer__file-item:hover {
+            background-color: #2d2d2d;
+        }
+
+        .diff-viewer__file-item--active {
+            background-color: #2d2d2d;
+            border-left: 3px solid #bb86fc;
+        }
+
+        .diff-viewer__file-name {
+            font-size: 14px;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+        }
+
+        .diff-viewer__file-changes {
+            font-size: 12px;
+            color: #b0b0b0;
+        }
+
+        .diff-viewer__code-panel {
+            flex: 1;
+            overflow: auto;
+        }
+
+        .diff-viewer__code {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .diff-viewer__line {
+            display: flex;
+            min-height: 21px;
+        }
+
+        .diff-viewer__line-number {
+            width: 50px;
+            padding: 0 8px;
+            text-align: right;
+            color: #6d6d6d;
+            background-color: #1e1e1e;
+            border-right: 1px solid #3d3d3d;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .diff-viewer__line-content {
+            flex: 1;
+            padding: 0 12px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .diff-viewer__line--added {
+            background-color: rgba(76, 175, 80, 0.15);
+        }
+
+        .diff-viewer__line--added .diff-viewer__line-content {
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .diff-viewer__line--removed {
+            background-color: rgba(244, 67, 54, 0.15);
+        }
+
+        .diff-viewer__line--removed .diff-viewer__line-content {
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        .diff-viewer__line--context {
+            background-color: #1e1e1e;
+        }
+
+        .diff-viewer__hunk-header {
+            background-color: #2d2d2d;
+            color: #bb86fc;
+            padding: 8px 12px;
+            font-size: 12px;
+            border-top: 1px solid #3d3d3d;
+            border-bottom: 1px solid #3d3d3d;
+        }
+
+        .material-icons {
+            font-size: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .diff-viewer__file-list {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .diff-viewer__content {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .diff-viewer__file-list {
+                width: 100%;
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="diff-viewer">
+        <div class="diff-viewer__header">
+            <div class="diff-viewer__title">
+                <span class="material-icons">compare_arrows</span>
+                feature/new-feature vs main
+            </div>
+            <div class="diff-viewer__stats">
+                <div class="diff-viewer__stat diff-viewer__stat--added">
+                    <span class="material-icons">add</span>
+                    <span>145</span>
+                </div>
+                <div class="diff-viewer__stat diff-viewer__stat--removed">
+                    <span class="material-icons">remove</span>
+                    <span>67</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="diff-viewer__content">
+            <div class="diff-viewer__file-list">
+                <div class="diff-viewer__file-item diff-viewer__file-item--active">
+                    <div class="diff-viewer__file-name">src/app/components/header.ts</div>
+                    <div class="diff-viewer__file-changes">+12 -3</div>
+                </div>
+                <div class="diff-viewer__file-item">
+                    <div class="diff-viewer__file-name">src/app/services/api.service.ts</div>
+                    <div class="diff-viewer__file-changes">+45 -10</div>
+                </div>
+                <div class="diff-viewer__file-item">
+                    <div class="diff-viewer__file-name">src/app/models/user.model.ts</div>
+                    <div class="diff-viewer__file-changes">+8 -2</div>
+                </div>
+                <div class="diff-viewer__file-item">
+                    <div class="diff-viewer__file-name">package.json</div>
+                    <div class="diff-viewer__file-changes">+3 -1</div>
+                </div>
+            </div>
+
+            <div class="diff-viewer__code-panel">
+                <div class="diff-viewer__code">
+                    <div class="diff-viewer__hunk-header">@@ -12,7 +12,18 @@ export class Header {</div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--context">
+                        <div class="diff-viewer__line-number">12</div>
+                        <div class="diff-viewer__line-content">  private _authService = inject(AuthService);</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--context">
+                        <div class="diff-viewer__line-number">13</div>
+                        <div class="diff-viewer__line-content">  private _router = inject(Router);</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--removed">
+                        <div class="diff-viewer__line-number">14</div>
+                        <div class="diff-viewer__line-content">-  isLoggedIn = false;</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--added">
+                        <div class="diff-viewer__line-number">14</div>
+                        <div class="diff-viewer__line-content">+  isLoggedIn$ = this._authService.isAuthenticated$;</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--added">
+                        <div class="diff-viewer__line-number">15</div>
+                        <div class="diff-viewer__line-content">+  user$ = this._authService.currentUser$;</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--context">
+                        <div class="diff-viewer__line-number">16</div>
+                        <div class="diff-viewer__line-content"></div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--removed">
+                        <div class="diff-viewer__line-number">17</div>
+                        <div class="diff-viewer__line-content">-  ngOnInit(): void {</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--removed">
+                        <div class="diff-viewer__line-number">18</div>
+                        <div class="diff-viewer__line-content">-    this._authService.isAuthenticated$.subscribe(</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--removed">
+                        <div class="diff-viewer__line-number">19</div>
+                        <div class="diff-viewer__line-content">-      isAuth => this.isLoggedIn = isAuth</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--removed">
+                        <div class="diff-viewer__line-number">20</div>
+                        <div class="diff-viewer__line-content">-    );</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--removed">
+                        <div class="diff-viewer__line-number">21</div>
+                        <div class="diff-viewer__line-content">-  }</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--added">
+                        <div class="diff-viewer__line-number">17</div>
+                        <div class="diff-viewer__line-content">+  logout(): void {</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--added">
+                        <div class="diff-viewer__line-number">18</div>
+                        <div class="diff-viewer__line-content">+    this._authService.logout();</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--added">
+                        <div class="diff-viewer__line-number">19</div>
+                        <div class="diff-viewer__line-content">+    this._router.navigate(['/login']);</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--added">
+                        <div class="diff-viewer__line-number">20</div>
+                        <div class="diff-viewer__line-content">+  }</div>
+                    </div>
+                    
+                    <div class="diff-viewer__line diff-viewer__line--context">
+                        <div class="diff-viewer__line-number">21</div>
+                        <div class="diff-viewer__line-content">}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

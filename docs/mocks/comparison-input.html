@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Review Tool - Comparison Input</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            padding: 24px;
+        }
+
+        .comparison-input {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            border-radius: 4px;
+            padding: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .comparison-input__header {
+            margin-bottom: 24px;
+        }
+
+        .comparison-input__title {
+            font-size: 24px;
+            font-weight: 400;
+            color: #bb86fc;
+            margin-bottom: 8px;
+        }
+
+        .comparison-input__subtitle {
+            font-size: 14px;
+            color: #b0b0b0;
+        }
+
+        .comparison-input__form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .comparison-input__field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .comparison-input__label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #bb86fc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .comparison-input__input {
+            background-color: #2d2d2d;
+            border: 1px solid #3d3d3d;
+            border-radius: 4px;
+            padding: 16px;
+            font-size: 16px;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.2s;
+        }
+
+        .comparison-input__input:focus {
+            outline: none;
+            border-color: #bb86fc;
+        }
+
+        .comparison-input__input::placeholder {
+            color: #6d6d6d;
+        }
+
+        .comparison-input__branch-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .comparison-input__actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .comparison-input__button {
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: none;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .comparison-input__button--secondary {
+            background-color: transparent;
+            color: #bb86fc;
+        }
+
+        .comparison-input__button--secondary:hover {
+            background-color: rgba(187, 134, 252, 0.08);
+        }
+
+        .comparison-input__button--primary {
+            background-color: #bb86fc;
+            color: #000000;
+        }
+
+        .comparison-input__button--primary:hover {
+            background-color: #d0a9ff;
+        }
+
+        .comparison-input__helper {
+            font-size: 12px;
+            color: #b0b0b0;
+            margin-top: 4px;
+        }
+
+        .comparison-input__icon {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .comparison-input__branch-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="comparison-input">
+        <div class="comparison-input__header">
+            <h1 class="comparison-input__title">
+                <span class="material-icons comparison-input__icon">code</span>
+                Code Comparison
+            </h1>
+            <p class="comparison-input__subtitle">Compare branches to review code changes</p>
+        </div>
+
+        <form class="comparison-input__form">
+            <div class="comparison-input__field">
+                <label class="comparison-input__label" for="repo-path">Repository Path</label>
+                <input 
+                    type="text" 
+                    id="repo-path" 
+                    class="comparison-input__input"
+                    placeholder="/path/to/repository"
+                    value="/home/user/projects/my-repo"
+                >
+                <span class="comparison-input__helper">Enter the local file system path to your Git repository</span>
+            </div>
+
+            <div class="comparison-input__branch-group">
+                <div class="comparison-input__field">
+                    <label class="comparison-input__label" for="source-branch">Source Branch</label>
+                    <input 
+                        type="text" 
+                        id="source-branch" 
+                        class="comparison-input__input"
+                        placeholder="main"
+                        value="main"
+                    >
+                </div>
+
+                <div class="comparison-input__field">
+                    <label class="comparison-input__label" for="target-branch">Target Branch</label>
+                    <input 
+                        type="text" 
+                        id="target-branch" 
+                        class="comparison-input__input"
+                        placeholder="feature/new-feature"
+                        value="feature/new-feature"
+                    >
+                </div>
+            </div>
+
+            <div class="comparison-input__actions">
+                <button type="button" class="comparison-input__button comparison-input__button--secondary">
+                    Clear
+                </button>
+                <button type="submit" class="comparison-input__button comparison-input__button--primary">
+                    Compare
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
