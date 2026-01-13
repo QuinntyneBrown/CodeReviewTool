@@ -1,0 +1,3 @@
+[submodule "Endpoint"]
+	path = Endpoint
+	url = https://github.com/QuinntyneBrown/Endpoint.git
