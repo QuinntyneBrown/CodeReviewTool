@@ -1,6 +1,6 @@
 Suppose you are a Senior Product Owner
 
-Create specifications for the following tool
+Create comprehensive specifications for the following tool
 
 Angular Workspace using Angular 21, dark theme and Angular Material UI Components for all frontend components
 
