@@ -102,4 +102,14 @@ describe('ComparisonService', () => {
       done();
     });
   });
+
+  it('should properly clean up subscriptions on destroy', () => {
+    const nextSpy = jest.spyOn(service['_destroy$'], 'next');
+    const completeSpy = jest.spyOn(service['_destroy$'], 'complete');
+
+    service.ngOnDestroy();
+
+    expect(nextSpy).toHaveBeenCalled();
+    expect(completeSpy).toHaveBeenCalled();
+  });
 });
