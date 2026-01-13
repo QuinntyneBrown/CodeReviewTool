@@ -1,0 +1,12 @@
+<div class="review">
+  <ng-container *ngIf="viewModel$ | async as vm">
+    <div *ngIf="vm.isLoading" class="review__loading">
+      <p>Loading comparison results...</p>
+    </div>
+    
+    <crt-diff-viewer 
+      *ngIf="vm.result" 
+      [diffResult]="vm.result"
+    ></crt-diff-viewer>
+  </ng-container>
+</div>

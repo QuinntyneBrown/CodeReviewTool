@@ -8,9 +8,15 @@ module.exports = {
   ],
   collectCoverageFrom: [
     'projects/code-review-tool-components/src/lib/**/*.ts',
+    'src/app/**/*.ts',
     '!projects/code-review-tool-components/src/lib/**/*.stories.ts',
     '!projects/code-review-tool-components/src/lib/**/*.spec.ts',
     '!projects/code-review-tool-components/src/lib/**/index.ts',
+    '!src/app/**/*.spec.ts',
+    '!src/app/**/index.ts',
+    '!src/app/app.ts',
+    '!src/app/app.config.ts',
+    '!src/app/app.routes.ts',
   ],
   coverageThreshold: {
     global: {
