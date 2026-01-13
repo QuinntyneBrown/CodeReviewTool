@@ -6,6 +6,9 @@ module.exports = {
     '<rootDir>/dist/',
     '<rootDir>/src/e2e/'
   ],
+  moduleNameMapper: {
+    'code-review-tool-components': '<rootDir>/projects/code-review-tool-components/src/public-api.ts',
+  },
   collectCoverageFrom: [
     'projects/code-review-tool-components/src/lib/**/*.ts',
     'src/app/**/*.ts',
