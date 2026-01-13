@@ -6,7 +6,9 @@
     
     <crt-diff-viewer 
       *ngIf="vm.result" 
-      [diffResult]="vm.result"
+      [files]="vm.result.files"
+      [sourceBranch]="vm.result.sourceBranch"
+      [targetBranch]="vm.result.targetBranch"
     ></crt-diff-viewer>
   </ng-container>
 </div>

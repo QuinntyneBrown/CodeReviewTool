@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { CodeComment as CommentModel } from '../models/diff.model';
+import { CommentData as CommentModel } from '../models/diff.model';
 
 @Component({
   selector: 'crt-code-comment',
