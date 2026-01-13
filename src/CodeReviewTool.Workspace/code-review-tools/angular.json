@@ -97,6 +97,36 @@
           "options": {
             "tsConfig": "projects/code-review-tool-components/tsconfig.spec.json"
           }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": "projects/code-review-tool-components/.storybook",
+            "browserTarget": "code-review-tool-components:build",
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "projects/code-review-tool-components"
+            ],
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": "projects/code-review-tool-components/.storybook",
+            "browserTarget": "code-review-tool-components:build",
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "projects/code-review-tool-components"
+            ],
+            "outputDir": "dist/storybook/code-review-tool-components"
+          }
         }
       }
     }
