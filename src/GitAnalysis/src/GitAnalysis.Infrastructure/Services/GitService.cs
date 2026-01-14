@@ -105,7 +105,7 @@ public class GitService : IGitService
         return Task.Run(() =>
         {
             using var repo = new Repository(repositoryPath);
-            return repo.Branches.Select(b => b.FriendlyName).AsEnumerable();
+            return repo.Branches.Select(b => b.FriendlyName).ToList().AsEnumerable();
         }, cancellationToken);
     }
 
@@ -114,11 +114,12 @@ public class GitService : IGitService
         return Task.Run(() =>
         {
             using var repo = new Repository(repositoryPath);
-            var branch = repo.Branches[branchName] 
+            var branch = repo.Branches[branchName]
                 ?? throw new InvalidOperationException($"Branch '{branchName}' not found");
-            
+
             return branch.Tip.Tree
                 .Select(entry => entry.Path)
+                .ToList()
                 .AsEnumerable();
         }, cancellationToken);
     }

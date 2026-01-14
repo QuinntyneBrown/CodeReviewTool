@@ -19,12 +19,32 @@ public static class ConfigureServices
     {
         services.Configure<NotificationOptions>(configuration.GetSection("Notifications"));
 
-        // Configure Redis connection
+        // Configure Redis connection (optional - gracefully handle missing Redis)
         var redisConnection = configuration.GetConnectionString("Redis") ?? "localhost:6379";
-        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnection));
+        var useRedis = configuration.GetValue<bool>("UseRedis", false);
+
+        if (useRedis)
+        {
+            try
+            {
+                var configOptions = ConfigurationOptions.Parse(redisConnection);
+                configOptions.AbortOnConnectFail = false;
+                services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configOptions));
+                services.AddSingleton<IRedisSubscriber, RedisSubscriber>();
+            }
+            catch (RedisConnectionException)
+            {
+                // Redis not available - register a null implementation
+                services.AddSingleton<IRedisSubscriber, NullRedisSubscriber>();
+            }
+        }
+        else
+        {
+            // Redis disabled - use in-memory only mode
+            services.AddSingleton<IRedisSubscriber, NullRedisSubscriber>();
+        }
 
         services.AddSingleton<IConnectionManager, ConnectionManager>();
-        services.AddSingleton<IRedisSubscriber, RedisSubscriber>();
         services.AddSingleton<ISubscriptionManager, SubscriptionManager>();
         services.AddHostedService<NotificationListenerService>();
 

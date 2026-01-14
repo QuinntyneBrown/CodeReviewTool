@@ -20,6 +20,7 @@ public static class ConfigureServices
         services.AddSingleton<IGitService, GitService>();
         services.AddSingleton<IGitIgnoreEngine, GitIgnoreEngine>();
         services.AddSingleton<IComparisonRequestRepository, ComparisonRequestRepository>();
+        services.AddSingleton<IDiffResultRepository, DiffResultRepository>();
         services.AddSingleton<ComparisonProcessorService>();
         services.AddHostedService(sp => sp.GetRequiredService<ComparisonProcessorService>());
 

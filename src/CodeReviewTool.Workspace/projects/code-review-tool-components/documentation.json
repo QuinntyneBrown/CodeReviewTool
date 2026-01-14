@@ -1,0 +1,1430 @@
+{
+    "pipes": [],
+    "interfaces": [],
+    "injectables": [],
+    "guards": [],
+    "interceptors": [],
+    "classes": [],
+    "directives": [],
+    "components": [],
+    "modules": [],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "Added",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    line: addedLine,\r\n    showCommentButton: true,\r\n    hasComment: false,\r\n  },\r\n}"
+            },
+            {
+                "name": "addedLine",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "DiffLine",
+                "defaultValue": "{\r\n  lineNumber: 14,\r\n  content: '+  isLoggedIn$ = this._authService.isAuthenticated$;',\r\n  type: 'added'\r\n}"
+            },
+            {
+                "name": "commentWithReplies",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "CommentData",
+                "defaultValue": "{\r\n  commentId: '3',\r\n  lineNumber: 20,\r\n  author: 'Bob Johnson',\r\n  authorInitials: 'BJ',\r\n  timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago\r\n  content: 'Should we add error handling here?',\r\n  resolved: false,\r\n  replies: [\r\n    {\r\n      commentId: '3-1',\r\n      lineNumber: 20,\r\n      author: 'Alice Smith',\r\n      authorInitials: 'AS',\r\n      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),\r\n      content: 'Good point! I\\'ll add a try-catch block.',\r\n      resolved: false,\r\n    },\r\n    {\r\n      commentId: '3-2',\r\n      lineNumber: 20,\r\n      author: 'Bob Johnson',\r\n      authorInitials: 'BJ',\r\n      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),\r\n      content: 'Thanks! That looks better.',\r\n      resolved: false,\r\n    },\r\n  ],\r\n}"
+            },
+            {
+                "name": "Context",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    line: contextLine,\r\n    showCommentButton: true,\r\n    hasComment: false,\r\n  },\r\n}"
+            },
+            {
+                "name": "contextLine",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "DiffLine",
+                "defaultValue": "{\r\n  lineNumber: 12,\r\n  content: '  private _authService = inject(AuthService);',\r\n  type: 'context'\r\n}"
+            },
+            {
+                "name": "CustomBranches",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    repositoryPath: '/path/to/repository',\r\n    sourceBranch: 'develop',\r\n    targetBranch: 'feature/user-auth',\r\n  },\r\n}"
+            },
+            {
+                "name": "Empty",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    repositoryPath: '',\r\n    sourceBranch: 'main',\r\n    targetBranch: '',\r\n  },\r\n}"
+            },
+            {
+                "name": "Empty",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    files: [],\r\n    sourceBranch: 'main',\r\n    targetBranch: 'feature/empty',\r\n  },\r\n}"
+            },
+            {
+                "name": "Large",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    size: 'large',\n    label: 'Button',\n  },\n}"
+            },
+            {
+                "name": "LoggedIn",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    user: {\n      name: 'Jane Doe',\n    },\n  },\n}"
+            },
+            {
+                "name": "LoggedIn",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement);\n    const loginButton = canvas.getByRole('button', { name: /Log in/i });\n    await expect(loginButton).toBeInTheDocument();\n    await userEvent.click(loginButton);\n    await expect(loginButton).not.toBeInTheDocument();\n\n    const logoutButton = canvas.getByRole('button', { name: /Log out/i });\n    await expect(logoutButton).toBeInTheDocument();\n  },\n}"
+            },
+            {
+                "name": "LoggedOut",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{}"
+            },
+            {
+                "name": "LoggedOut",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<ButtonComponent>",
+                "defaultValue": "{\n  title: 'Example/Button',\n  component: ButtonComponent,\n  tags: ['autodocs'],\n  argTypes: {\n    backgroundColor: {\n      control: 'color',\n    },\n  },\n  // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args\n  args: { onClick: fn() },\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<HeaderComponent>",
+                "defaultValue": "{\n  title: 'Example/Header',\n  component: HeaderComponent,\n  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs\n  tags: ['autodocs'],\n  parameters: {\n    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout\n    layout: 'fullscreen',\n  },\n  args: {\n    onLogin: fn(),\n    onLogout: fn(),\n    onCreateAccount: fn(),\n  },\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<PageComponent>",
+                "defaultValue": "{\n  title: 'Example/Page',\n  component: PageComponent,\n  parameters: {\n    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout\n    layout: 'fullscreen',\n  },\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<CodeComment>",
+                "defaultValue": "{\r\n  title: 'Code Review Tool/Code Comment',\r\n  component: CodeComment,\r\n  tags: ['autodocs'],\r\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<CodeLine>",
+                "defaultValue": "{\r\n  title: 'Code Review Tool/Code Line',\r\n  component: CodeLine,\r\n  tags: ['autodocs'],\r\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<ComparisonInput>",
+                "defaultValue": "{\r\n  title: 'Code Review Tool/Comparison Input',\r\n  component: ComparisonInput,\r\n  tags: ['autodocs'],\r\n  argTypes: {\r\n    repositoryPath: { control: 'text' },\r\n    sourceBranch: { control: 'text' },\r\n    targetBranch: { control: 'text' },\r\n  },\r\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<DiffViewer>",
+                "defaultValue": "{\r\n  title: 'Code Review Tool/Diff Viewer',\r\n  component: DiffViewer,\r\n  tags: ['autodocs'],\r\n}"
+            },
+            {
+                "name": "mockDiffFiles",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "DiffFile[]",
+                "defaultValue": "[\r\n  {\r\n    fileName: 'src/app/components/header.ts',\r\n    additions: 12,\r\n    deletions: 3,\r\n    changes: [\r\n      { lineNumber: 12, content: '  private _authService = inject(AuthService);', type: 'context' },\r\n      { lineNumber: 13, content: '  private _router = inject(Router);', type: 'context' },\r\n      { lineNumber: 14, content: '-  isLoggedIn = false;', type: 'removed' },\r\n      { lineNumber: 14, content: '+  isLoggedIn$ = this._authService.isAuthenticated$;', type: 'added' },\r\n      { lineNumber: 15, content: '+  user$ = this._authService.currentUser$;', type: 'added' },\r\n      { lineNumber: 16, content: '', type: 'context' },\r\n      { lineNumber: 17, content: '-  ngOnInit(): void {', type: 'removed' },\r\n      { lineNumber: 18, content: '-    this._authService.isAuthenticated$.subscribe(', type: 'removed' },\r\n      { lineNumber: 19, content: '-      isAuth => this.isLoggedIn = isAuth', type: 'removed' },\r\n      { lineNumber: 20, content: '-    );', type: 'removed' },\r\n      { lineNumber: 21, content: '-  }', type: 'removed' },\r\n      { lineNumber: 17, content: '+  logout(): void {', type: 'added' },\r\n      { lineNumber: 18, content: '+    this._authService.logout();', type: 'added' },\r\n      { lineNumber: 19, content: '+    this._router.navigate([\\'/login\\']);', type: 'added' },\r\n      { lineNumber: 20, content: '+  }', type: 'added' },\r\n      { lineNumber: 21, content: '}', type: 'context' },\r\n    ],\r\n  },\r\n  {\r\n    fileName: 'src/app/services/api.service.ts',\r\n    additions: 45,\r\n    deletions: 10,\r\n    changes: [\r\n      { lineNumber: 1, content: 'import { Injectable } from \\'@angular/core\\';', type: 'context' },\r\n      { lineNumber: 2, content: 'import { HttpClient } from \\'@angular/common/http\\';', type: 'context' },\r\n      { lineNumber: 3, content: '+import { Observable } from \\'rxjs\\';', type: 'added' },\r\n    ],\r\n  },\r\n  {\r\n    fileName: 'package.json',\r\n    additions: 3,\r\n    deletions: 1,\r\n    changes: [\r\n      { lineNumber: 10, content: '  \"dependencies\": {', type: 'context' },\r\n      { lineNumber: 11, content: '-    \"@angular/core\": \"^18.0.0\",', type: 'removed' },\r\n      { lineNumber: 11, content: '+    \"@angular/core\": \"^21.0.0\",', type: 'added' },\r\n    ],\r\n  },\r\n]"
+            },
+            {
+                "name": "NoCommentButton",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    line: contextLine,\r\n    showCommentButton: false,\r\n    hasComment: false,\r\n  },\r\n}"
+            },
+            {
+                "name": "preview",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/.storybook/preview.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Preview",
+                "defaultValue": "{\r\n  parameters: {\r\n    controls: {\r\n      matchers: {\r\n       color: /(background|color)$/i,\r\n       date: /Date$/i,\r\n      },\r\n    },\r\n    backgrounds: {\r\n      default: 'dark',\r\n      values: [\r\n        {\r\n          name: 'dark',\r\n          value: '#121212',\r\n        },\r\n        {\r\n          name: 'light',\r\n          value: '#ffffff',\r\n        },\r\n      ],\r\n    },\r\n  },\r\n}"
+            },
+            {
+                "name": "Primary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    primary: true,\n    label: 'Button',\n  },\n}"
+            },
+            {
+                "name": "Removed",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    line: removedLine,\r\n    showCommentButton: true,\r\n    hasComment: false,\r\n  },\r\n}"
+            },
+            {
+                "name": "removedLine",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "DiffLine",
+                "defaultValue": "{\r\n  lineNumber: 14,\r\n  content: '-  isLoggedIn = false;',\r\n  type: 'removed'\r\n}"
+            },
+            {
+                "name": "Resolved",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    comment: resolvedComment,\r\n    isReplyFormVisible: false,\r\n  },\r\n}"
+            },
+            {
+                "name": "resolvedComment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "CommentData",
+                "defaultValue": "{\r\n  commentId: '2',\r\n  lineNumber: 14,\r\n  author: 'Alice Smith',\r\n  authorInitials: 'AS',\r\n  timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago\r\n  content: 'Agreed! Make sure to also update the template to use the async pipe.',\r\n  resolved: true,\r\n}"
+            },
+            {
+                "name": "Secondary",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    label: 'Button',\n  },\n}"
+            },
+            {
+                "name": "Simple",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    comment: simpleComment,\r\n    isReplyFormVisible: false,\r\n  },\r\n}"
+            },
+            {
+                "name": "simpleComment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "CommentData",
+                "defaultValue": "{\r\n  commentId: '1',\r\n  lineNumber: 14,\r\n  author: 'John Doe',\r\n  authorInitials: 'JD',\r\n  timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago\r\n  content: 'Great improvement! Using observables with the async pipe is much better than manual subscriptions.',\r\n  resolved: false,\r\n}"
+            },
+            {
+                "name": "SingleFile",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    files: [mockDiffFiles[0]],\r\n    sourceBranch: 'develop',\r\n    targetBranch: 'feature/header-refactor',\r\n  },\r\n}"
+            },
+            {
+                "name": "Small",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\n  args: {\n    size: 'small',\n    label: 'Button',\n  },\n}"
+            },
+            {
+                "name": "WithComment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    line: addedLine,\r\n    showCommentButton: true,\r\n    hasComment: true,\r\n  },\r\n}"
+            },
+            {
+                "name": "WithData",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    repositoryPath: '/home/user/projects/my-repo',\r\n    sourceBranch: 'main',\r\n    targetBranch: 'feature/new-feature',\r\n  },\r\n}"
+            },
+            {
+                "name": "WithFiles",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    files: mockDiffFiles,\r\n    sourceBranch: 'main',\r\n    targetBranch: 'feature/new-feature',\r\n  },\r\n}"
+            },
+            {
+                "name": "WithReplies",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    comment: commentWithReplies,\r\n    isReplyFormVisible: true,\r\n  },\r\n}"
+            },
+            {
+                "name": "WithReplyForm",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "{\r\n  args: {\r\n    comment: simpleComment,\r\n    isReplyFormVisible: true,\r\n  },\r\n}"
+            }
+        ],
+        "functions": [],
+        "typealiases": [
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<ButtonComponent>",
+                "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 184
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<HeaderComponent>",
+                "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 184
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<PageComponent>",
+                "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 184
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<CodeComment>",
+                "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 184
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<CodeLine>",
+                "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 184
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<ComparisonInput>",
+                "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 184
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<DiffViewer>",
+                "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 184
+            }
+        ],
+        "enumerations": [],
+        "groupedVariables": {
+            "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts": [
+                {
+                    "name": "Added",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    line: addedLine,\r\n    showCommentButton: true,\r\n    hasComment: false,\r\n  },\r\n}"
+                },
+                {
+                    "name": "addedLine",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "DiffLine",
+                    "defaultValue": "{\r\n  lineNumber: 14,\r\n  content: '+  isLoggedIn$ = this._authService.isAuthenticated$;',\r\n  type: 'added'\r\n}"
+                },
+                {
+                    "name": "Context",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    line: contextLine,\r\n    showCommentButton: true,\r\n    hasComment: false,\r\n  },\r\n}"
+                },
+                {
+                    "name": "contextLine",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "DiffLine",
+                    "defaultValue": "{\r\n  lineNumber: 12,\r\n  content: '  private _authService = inject(AuthService);',\r\n  type: 'context'\r\n}"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<CodeLine>",
+                    "defaultValue": "{\r\n  title: 'Code Review Tool/Code Line',\r\n  component: CodeLine,\r\n  tags: ['autodocs'],\r\n}"
+                },
+                {
+                    "name": "NoCommentButton",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    line: contextLine,\r\n    showCommentButton: false,\r\n    hasComment: false,\r\n  },\r\n}"
+                },
+                {
+                    "name": "Removed",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    line: removedLine,\r\n    showCommentButton: true,\r\n    hasComment: false,\r\n  },\r\n}"
+                },
+                {
+                    "name": "removedLine",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "DiffLine",
+                    "defaultValue": "{\r\n  lineNumber: 14,\r\n  content: '-  isLoggedIn = false;',\r\n  type: 'removed'\r\n}"
+                },
+                {
+                    "name": "WithComment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    line: addedLine,\r\n    showCommentButton: true,\r\n    hasComment: true,\r\n  },\r\n}"
+                }
+            ],
+            "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts": [
+                {
+                    "name": "commentWithReplies",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "CommentData",
+                    "defaultValue": "{\r\n  commentId: '3',\r\n  lineNumber: 20,\r\n  author: 'Bob Johnson',\r\n  authorInitials: 'BJ',\r\n  timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago\r\n  content: 'Should we add error handling here?',\r\n  resolved: false,\r\n  replies: [\r\n    {\r\n      commentId: '3-1',\r\n      lineNumber: 20,\r\n      author: 'Alice Smith',\r\n      authorInitials: 'AS',\r\n      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),\r\n      content: 'Good point! I\\'ll add a try-catch block.',\r\n      resolved: false,\r\n    },\r\n    {\r\n      commentId: '3-2',\r\n      lineNumber: 20,\r\n      author: 'Bob Johnson',\r\n      authorInitials: 'BJ',\r\n      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),\r\n      content: 'Thanks! That looks better.',\r\n      resolved: false,\r\n    },\r\n  ],\r\n}"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<CodeComment>",
+                    "defaultValue": "{\r\n  title: 'Code Review Tool/Code Comment',\r\n  component: CodeComment,\r\n  tags: ['autodocs'],\r\n}"
+                },
+                {
+                    "name": "Resolved",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    comment: resolvedComment,\r\n    isReplyFormVisible: false,\r\n  },\r\n}"
+                },
+                {
+                    "name": "resolvedComment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "CommentData",
+                    "defaultValue": "{\r\n  commentId: '2',\r\n  lineNumber: 14,\r\n  author: 'Alice Smith',\r\n  authorInitials: 'AS',\r\n  timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago\r\n  content: 'Agreed! Make sure to also update the template to use the async pipe.',\r\n  resolved: true,\r\n}"
+                },
+                {
+                    "name": "Simple",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    comment: simpleComment,\r\n    isReplyFormVisible: false,\r\n  },\r\n}"
+                },
+                {
+                    "name": "simpleComment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "CommentData",
+                    "defaultValue": "{\r\n  commentId: '1',\r\n  lineNumber: 14,\r\n  author: 'John Doe',\r\n  authorInitials: 'JD',\r\n  timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago\r\n  content: 'Great improvement! Using observables with the async pipe is much better than manual subscriptions.',\r\n  resolved: false,\r\n}"
+                },
+                {
+                    "name": "WithReplies",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    comment: commentWithReplies,\r\n    isReplyFormVisible: true,\r\n  },\r\n}"
+                },
+                {
+                    "name": "WithReplyForm",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    comment: simpleComment,\r\n    isReplyFormVisible: true,\r\n  },\r\n}"
+                }
+            ],
+            "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts": [
+                {
+                    "name": "CustomBranches",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    repositoryPath: '/path/to/repository',\r\n    sourceBranch: 'develop',\r\n    targetBranch: 'feature/user-auth',\r\n  },\r\n}"
+                },
+                {
+                    "name": "Empty",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    repositoryPath: '',\r\n    sourceBranch: 'main',\r\n    targetBranch: '',\r\n  },\r\n}"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<ComparisonInput>",
+                    "defaultValue": "{\r\n  title: 'Code Review Tool/Comparison Input',\r\n  component: ComparisonInput,\r\n  tags: ['autodocs'],\r\n  argTypes: {\r\n    repositoryPath: { control: 'text' },\r\n    sourceBranch: { control: 'text' },\r\n    targetBranch: { control: 'text' },\r\n  },\r\n}"
+                },
+                {
+                    "name": "WithData",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    repositoryPath: '/home/user/projects/my-repo',\r\n    sourceBranch: 'main',\r\n    targetBranch: 'feature/new-feature',\r\n  },\r\n}"
+                }
+            ],
+            "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts": [
+                {
+                    "name": "Empty",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    files: [],\r\n    sourceBranch: 'main',\r\n    targetBranch: 'feature/empty',\r\n  },\r\n}"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<DiffViewer>",
+                    "defaultValue": "{\r\n  title: 'Code Review Tool/Diff Viewer',\r\n  component: DiffViewer,\r\n  tags: ['autodocs'],\r\n}"
+                },
+                {
+                    "name": "mockDiffFiles",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "DiffFile[]",
+                    "defaultValue": "[\r\n  {\r\n    fileName: 'src/app/components/header.ts',\r\n    additions: 12,\r\n    deletions: 3,\r\n    changes: [\r\n      { lineNumber: 12, content: '  private _authService = inject(AuthService);', type: 'context' },\r\n      { lineNumber: 13, content: '  private _router = inject(Router);', type: 'context' },\r\n      { lineNumber: 14, content: '-  isLoggedIn = false;', type: 'removed' },\r\n      { lineNumber: 14, content: '+  isLoggedIn$ = this._authService.isAuthenticated$;', type: 'added' },\r\n      { lineNumber: 15, content: '+  user$ = this._authService.currentUser$;', type: 'added' },\r\n      { lineNumber: 16, content: '', type: 'context' },\r\n      { lineNumber: 17, content: '-  ngOnInit(): void {', type: 'removed' },\r\n      { lineNumber: 18, content: '-    this._authService.isAuthenticated$.subscribe(', type: 'removed' },\r\n      { lineNumber: 19, content: '-      isAuth => this.isLoggedIn = isAuth', type: 'removed' },\r\n      { lineNumber: 20, content: '-    );', type: 'removed' },\r\n      { lineNumber: 21, content: '-  }', type: 'removed' },\r\n      { lineNumber: 17, content: '+  logout(): void {', type: 'added' },\r\n      { lineNumber: 18, content: '+    this._authService.logout();', type: 'added' },\r\n      { lineNumber: 19, content: '+    this._router.navigate([\\'/login\\']);', type: 'added' },\r\n      { lineNumber: 20, content: '+  }', type: 'added' },\r\n      { lineNumber: 21, content: '}', type: 'context' },\r\n    ],\r\n  },\r\n  {\r\n    fileName: 'src/app/services/api.service.ts',\r\n    additions: 45,\r\n    deletions: 10,\r\n    changes: [\r\n      { lineNumber: 1, content: 'import { Injectable } from \\'@angular/core\\';', type: 'context' },\r\n      { lineNumber: 2, content: 'import { HttpClient } from \\'@angular/common/http\\';', type: 'context' },\r\n      { lineNumber: 3, content: '+import { Observable } from \\'rxjs\\';', type: 'added' },\r\n    ],\r\n  },\r\n  {\r\n    fileName: 'package.json',\r\n    additions: 3,\r\n    deletions: 1,\r\n    changes: [\r\n      { lineNumber: 10, content: '  \"dependencies\": {', type: 'context' },\r\n      { lineNumber: 11, content: '-    \"@angular/core\": \"^18.0.0\",', type: 'removed' },\r\n      { lineNumber: 11, content: '+    \"@angular/core\": \"^21.0.0\",', type: 'added' },\r\n    ],\r\n  },\r\n]"
+                },
+                {
+                    "name": "SingleFile",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    files: [mockDiffFiles[0]],\r\n    sourceBranch: 'develop',\r\n    targetBranch: 'feature/header-refactor',\r\n  },\r\n}"
+                },
+                {
+                    "name": "WithFiles",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\r\n  args: {\r\n    files: mockDiffFiles,\r\n    sourceBranch: 'main',\r\n    targetBranch: 'feature/new-feature',\r\n  },\r\n}"
+                }
+            ],
+            "projects/code-review-tool-components/src/stories/button.stories.ts": [
+                {
+                    "name": "Large",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    size: 'large',\n    label: 'Button',\n  },\n}"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<ButtonComponent>",
+                    "defaultValue": "{\n  title: 'Example/Button',\n  component: ButtonComponent,\n  tags: ['autodocs'],\n  argTypes: {\n    backgroundColor: {\n      control: 'color',\n    },\n  },\n  // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args\n  args: { onClick: fn() },\n}"
+                },
+                {
+                    "name": "Primary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    primary: true,\n    label: 'Button',\n  },\n}"
+                },
+                {
+                    "name": "Secondary",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    label: 'Button',\n  },\n}"
+                },
+                {
+                    "name": "Small",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    size: 'small',\n    label: 'Button',\n  },\n}"
+                }
+            ],
+            "projects/code-review-tool-components/src/stories/header.stories.ts": [
+                {
+                    "name": "LoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  args: {\n    user: {\n      name: 'Jane Doe',\n    },\n  },\n}"
+                },
+                {
+                    "name": "LoggedOut",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{}"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<HeaderComponent>",
+                    "defaultValue": "{\n  title: 'Example/Header',\n  component: HeaderComponent,\n  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs\n  tags: ['autodocs'],\n  parameters: {\n    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout\n    layout: 'fullscreen',\n  },\n  args: {\n    onLogin: fn(),\n    onLogout: fn(),\n    onCreateAccount: fn(),\n  },\n}"
+                }
+            ],
+            "projects/code-review-tool-components/src/stories/page.stories.ts": [
+                {
+                    "name": "LoggedIn",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement);\n    const loginButton = canvas.getByRole('button', { name: /Log in/i });\n    await expect(loginButton).toBeInTheDocument();\n    await userEvent.click(loginButton);\n    await expect(loginButton).not.toBeInTheDocument();\n\n    const logoutButton = canvas.getByRole('button', { name: /Log out/i });\n    await expect(logoutButton).toBeInTheDocument();\n  },\n}"
+                },
+                {
+                    "name": "LoggedOut",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "{}"
+                },
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<PageComponent>",
+                    "defaultValue": "{\n  title: 'Example/Page',\n  component: PageComponent,\n  parameters: {\n    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout\n    layout: 'fullscreen',\n  },\n}"
+                }
+            ],
+            "projects/code-review-tool-components/.storybook/preview.ts": [
+                {
+                    "name": "preview",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "projects/code-review-tool-components/.storybook/preview.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Preview",
+                    "defaultValue": "{\r\n  parameters: {\r\n    controls: {\r\n      matchers: {\r\n       color: /(background|color)$/i,\r\n       date: /Date$/i,\r\n      },\r\n    },\r\n    backgrounds: {\r\n      default: 'dark',\r\n      values: [\r\n        {\r\n          name: 'dark',\r\n          value: '#121212',\r\n        },\r\n        {\r\n          name: 'light',\r\n          value: '#ffffff',\r\n        },\r\n      ],\r\n    },\r\n  },\r\n}"
+                }
+            ]
+        },
+        "groupedFunctions": {},
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {
+            "projects/code-review-tool-components/src/stories/button.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<ButtonComponent>",
+                    "file": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 184
+                }
+            ],
+            "projects/code-review-tool-components/src/stories/header.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<HeaderComponent>",
+                    "file": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 184
+                }
+            ],
+            "projects/code-review-tool-components/src/stories/page.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<PageComponent>",
+                    "file": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 184
+                }
+            ],
+            "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<CodeComment>",
+                    "file": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 184
+                }
+            ],
+            "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<CodeLine>",
+                    "file": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 184
+                }
+            ],
+            "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<ComparisonInput>",
+                    "file": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 184
+                }
+            ],
+            "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<DiffViewer>",
+                    "file": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 184
+                }
+            ]
+        }
+    },
+    "routes": {
+        "name": "<root>",
+        "kind": "module",
+        "children": []
+    },
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "projects/code-review-tool-components/.storybook/preview.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "preview",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "commentWithReplies",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Resolved",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "resolvedComment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Simple",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "simpleComment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "WithReplies",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "WithReplyForm",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-comment/code-comment.stories.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Story",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Added",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "addedLine",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Context",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "contextLine",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "NoCommentButton",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Removed",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "removedLine",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "WithComment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/code-line/code-line.stories.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Story",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "CustomBranches",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Empty",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "WithData",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/comparison-input/comparison-input.stories.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Story",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Empty",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "mockDiffFiles",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "SingleFile",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "WithFiles",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/lib/diff-viewer/diff-viewer.stories.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Story",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Large",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Primary",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Secondary",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Small",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/button.stories.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Story",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedIn",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedOut",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/header.stories.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Story",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedIn",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoggedOut",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "projects/code-review-tool-components/src/stories/page.stories.ts",
+                "type": "type alias",
+                "linktype": "miscellaneous",
+                "linksubtype": "typealias",
+                "name": "Story",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}

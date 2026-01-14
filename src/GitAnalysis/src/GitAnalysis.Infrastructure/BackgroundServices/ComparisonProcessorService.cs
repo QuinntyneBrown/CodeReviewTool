@@ -21,16 +21,19 @@ public class ComparisonProcessorService : BackgroundService
     private readonly ILogger<ComparisonProcessorService> logger;
     private readonly IGitService gitService;
     private readonly IComparisonRequestRepository repository;
+    private readonly IDiffResultRepository diffResultRepository;
     private readonly Channel<Guid> requestQueue;
 
     public ComparisonProcessorService(
         ILogger<ComparisonProcessorService> logger,
         IGitService gitService,
-        IComparisonRequestRepository repository)
+        IComparisonRequestRepository repository,
+        IDiffResultRepository diffResultRepository)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.gitService = gitService ?? throw new ArgumentNullException(nameof(gitService));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        this.diffResultRepository = diffResultRepository ?? throw new ArgumentNullException(nameof(diffResultRepository));
         this.requestQueue = Channel.CreateUnbounded<Guid>();
     }
 
@@ -63,6 +66,8 @@ public class ComparisonProcessorService : BackgroundService
                     request.SourceBranch,
                     request.TargetBranch,
                     stoppingToken);
+
+                await diffResultRepository.SaveAsync(request.RequestId, result, stoppingToken);
 
                 request.Status = GitComparisonStatus.Completed;
                 request.CompletedAt = DateTime.UtcNow;

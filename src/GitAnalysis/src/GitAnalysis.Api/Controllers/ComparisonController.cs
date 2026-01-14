@@ -18,17 +18,20 @@ public class ComparisonController : ControllerBase
 {
     private readonly ILogger<ComparisonController> logger;
     private readonly IComparisonRequestRepository repository;
+    private readonly IDiffResultRepository diffResultRepository;
     private readonly ComparisonProcessorService processorService;
     private readonly IGitService gitService;
 
     public ComparisonController(
         ILogger<ComparisonController> logger,
         IComparisonRequestRepository repository,
+        IDiffResultRepository diffResultRepository,
         ComparisonProcessorService processorService,
         IGitService gitService)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        this.diffResultRepository = diffResultRepository ?? throw new ArgumentNullException(nameof(diffResultRepository));
         this.processorService = processorService ?? throw new ArgumentNullException(nameof(processorService));
         this.gitService = gitService ?? throw new ArgumentNullException(nameof(gitService));
     }
@@ -80,9 +83,36 @@ public class ComparisonController : ControllerBase
         {
             RequestId = request.RequestId,
             Status = request.Status.ToString(),
+            SourceBranch = request.SourceBranch,
+            TargetBranch = request.TargetBranch,
             CompletedAt = request.CompletedAt,
             ErrorMessage = request.ErrorMessage
         };
+
+        // If completed, include the diff results
+        if (request.Status == GitComparisonStatus.Completed)
+        {
+            var diffResult = await diffResultRepository.GetByRequestIdAsync(requestId, cancellationToken);
+            if (diffResult != null)
+            {
+                result.FileDiffs = diffResult.FileDiffs.Select(f => new FileDiffDto
+                {
+                    FilePath = f.FilePath,
+                    ChangeType = f.ChangeType.ToString(),
+                    Additions = f.Additions,
+                    Deletions = f.Deletions,
+                    LineChanges = f.LineChanges.Select(l => new LineDiffDto
+                    {
+                        LineNumber = l.LineNumber,
+                        Content = l.Content,
+                        Type = l.Type.ToString()
+                    }).ToList()
+                }).ToList();
+                result.TotalAdditions = diffResult.TotalAdditions;
+                result.TotalDeletions = diffResult.TotalDeletions;
+                result.TotalModifications = diffResult.TotalModifications;
+            }
+        }
 
         return Ok(result);
     }

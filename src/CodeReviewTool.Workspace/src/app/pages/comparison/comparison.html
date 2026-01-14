@@ -1,0 +1,26 @@
+<div class="comparison">
+  <header class="comparison__header">
+    <h1 class="comparison__title">Code Review Tool</h1>
+    <p class="comparison__subtitle">Compare branches and review changes</p>
+  </header>
+
+  <main class="comparison__main">
+    <crt-comparison-input
+      (compare)="onCompare($event)"
+      [class.comparison__input--disabled]="(state$ | async)?.loading">
+    </crt-comparison-input>
+
+    @if ((state$ | async)?.loading) {
+      <div class="comparison__loading">
+        <mat-spinner diameter="48"></mat-spinner>
+        <p class="comparison__loading-text">Processing comparison...</p>
+      </div>
+    }
+
+    @if ((state$ | async)?.error) {
+      <div class="comparison__error">
+        <p>{{ (state$ | async)?.error }}</p>
+      </div>
+    }
+  </main>
+</div>
