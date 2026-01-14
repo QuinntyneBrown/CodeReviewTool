@@ -2,6 +2,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using System.Net;
 
 namespace ApiGateway.Tests;
@@ -50,10 +52,10 @@ public class CorsTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public void ApiGateway_Should_Have_Cors_Policy_Configured()
+    public void ApiGateway_Should_Have_Cors_Services_Configured()
     {
-        var client = factory.CreateClient();
-        Assert.NotNull(client);
+        var corsService = factory.Services.GetService<ICorsService>();
+        Assert.NotNull(corsService);
     }
 
     [Fact]

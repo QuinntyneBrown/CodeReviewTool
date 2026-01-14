@@ -15,6 +15,15 @@ public class RoutingTests : IClassFixture<WebApplicationFactory<Program>>
         this.factory = factory;
     }
 
+    private static void AssertBackendUnavailableResponse(HttpStatusCode statusCode)
+    {
+        Assert.True(
+            statusCode == HttpStatusCode.BadGateway ||
+            statusCode == HttpStatusCode.ServiceUnavailable ||
+            statusCode == HttpStatusCode.NotFound,
+            $"Expected BadGateway, ServiceUnavailable, or NotFound but got {statusCode}");
+    }
+
     [Fact]
     public async Task Route_To_GitAnalysis_Should_Be_Configured()
     {
@@ -27,13 +36,7 @@ public class RoutingTests : IClassFixture<WebApplicationFactory<Program>>
         // but the gateway should process it (502 Bad Gateway expected)
         var response = await client.GetAsync("/api/comparison/test-id");
 
-        // Should get 502 (Bad Gateway) when backend is not available
-        // or 404 if route doesn't match - both indicate routing is configured
-        Assert.True(
-            response.StatusCode == HttpStatusCode.BadGateway ||
-            response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-            response.StatusCode == HttpStatusCode.NotFound,
-            $"Expected BadGateway, ServiceUnavailable, or NotFound but got {response.StatusCode}");
+        AssertBackendUnavailableResponse(response.StatusCode);
     }
 
     [Fact]
@@ -47,13 +50,7 @@ public class RoutingTests : IClassFixture<WebApplicationFactory<Program>>
         // This will fail to route to backend since backend is not running
         var response = await client.GetAsync("/notifications/test");
 
-        // Should get 502 (Bad Gateway) when backend is not available
-        // or 404 if route doesn't match - both indicate routing is configured
-        Assert.True(
-            response.StatusCode == HttpStatusCode.BadGateway ||
-            response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-            response.StatusCode == HttpStatusCode.NotFound,
-            $"Expected BadGateway, ServiceUnavailable, or NotFound but got {response.StatusCode}");
+        AssertBackendUnavailableResponse(response.StatusCode);
     }
 
     [Fact]
@@ -63,11 +60,7 @@ public class RoutingTests : IClassFixture<WebApplicationFactory<Program>>
 
         var response = await client.GetAsync("/api/comparison/test-id");
 
-        // When backend is not running, expect Bad Gateway or Service Unavailable
-        Assert.True(
-            response.StatusCode == HttpStatusCode.BadGateway ||
-            response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-            response.StatusCode == HttpStatusCode.NotFound);
+        AssertBackendUnavailableResponse(response.StatusCode);
     }
 
     [Theory]
@@ -80,11 +73,7 @@ public class RoutingTests : IClassFixture<WebApplicationFactory<Program>>
 
         var response = await client.GetAsync(path);
 
-        // Should attempt to forward (502/503 when backend not available)
-        Assert.True(
-            response.StatusCode == HttpStatusCode.BadGateway ||
-            response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-            response.StatusCode == HttpStatusCode.NotFound);
+        AssertBackendUnavailableResponse(response.StatusCode);
     }
 
     [Theory]
@@ -96,11 +85,7 @@ public class RoutingTests : IClassFixture<WebApplicationFactory<Program>>
 
         var response = await client.GetAsync(path);
 
-        // Should attempt to forward (502/503 when backend not available)
-        Assert.True(
-            response.StatusCode == HttpStatusCode.BadGateway ||
-            response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-            response.StatusCode == HttpStatusCode.NotFound);
+        AssertBackendUnavailableResponse(response.StatusCode);
     }
 
     [Fact]
@@ -121,10 +106,6 @@ public class RoutingTests : IClassFixture<WebApplicationFactory<Program>>
 
         var response = await client.PostAsync("/api/comparison", content);
 
-        // Should attempt to forward (502/503 when backend not available)
-        Assert.True(
-            response.StatusCode == HttpStatusCode.BadGateway ||
-            response.StatusCode == HttpStatusCode.ServiceUnavailable ||
-            response.StatusCode == HttpStatusCode.NotFound);
+        AssertBackendUnavailableResponse(response.StatusCode);
     }
 }
