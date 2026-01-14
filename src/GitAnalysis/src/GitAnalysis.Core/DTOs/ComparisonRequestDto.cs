@@ -12,6 +12,6 @@ namespace GitAnalysis.Core.DTOs;
 public class ComparisonRequestDto
 {
     public required string RepositoryPath { get; set; }
-    public required string SourceBranch { get; set; }
-    public required string TargetBranch { get; set; }
+    public required string FromBranch { get; set; }
+    public required string IntoBranch { get; set; }
 }

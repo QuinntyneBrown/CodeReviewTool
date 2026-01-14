@@ -35,23 +35,23 @@ describe('ComparisonInput', () => {
 
   it('should initialize with default values', () => {
     expect(component.repositoryPath).toBe('');
-    expect(component.sourceBranch).toBe('main');
-    expect(component.targetBranch).toBe('');
+    expect(component.fromBranch).toBe('main');
+    expect(component.intoBranch).toBe('');
   });
 
   it('should emit compare event when form is valid', () => {
     const emitSpy = jest.spyOn(component.compare, 'emit');
     
     component.repositoryPath = '/path/to/repo';
-    component.sourceBranch = 'main';
-    component.targetBranch = 'feature/test';
+    component.fromBranch = 'main';
+    component.intoBranch = 'feature/test';
     
     component.onCompare();
     
     expect(emitSpy).toHaveBeenCalledWith({
       repositoryPath: '/path/to/repo',
-      sourceBranch: 'main',
-      targetBranch: 'feature/test'
+      fromBranch: 'main',
+      intoBranch: 'feature/test'
     });
   });
 
@@ -59,32 +59,32 @@ describe('ComparisonInput', () => {
     const emitSpy = jest.spyOn(component.compare, 'emit');
     
     component.repositoryPath = '';
-    component.sourceBranch = 'main';
-    component.targetBranch = 'feature/test';
+    component.fromBranch = 'main';
+    component.intoBranch = 'feature/test';
     
     component.onCompare();
     
     expect(emitSpy).not.toHaveBeenCalled();
   });
 
-  it('should not emit compare event when source branch is empty', () => {
+  it('should not emit compare event when from branch is empty', () => {
     const emitSpy = jest.spyOn(component.compare, 'emit');
     
     component.repositoryPath = '/path/to/repo';
-    component.sourceBranch = '';
-    component.targetBranch = 'feature/test';
+    component.fromBranch = '';
+    component.intoBranch = 'feature/test';
     
     component.onCompare();
     
     expect(emitSpy).not.toHaveBeenCalled();
   });
 
-  it('should not emit compare event when target branch is empty', () => {
+  it('should not emit compare event when into branch is empty', () => {
     const emitSpy = jest.spyOn(component.compare, 'emit');
     
     component.repositoryPath = '/path/to/repo';
-    component.sourceBranch = 'main';
-    component.targetBranch = '';
+    component.fromBranch = 'main';
+    component.intoBranch = '';
     
     component.onCompare();
     
@@ -93,14 +93,14 @@ describe('ComparisonInput', () => {
 
   it('should clear form when onClear is called', () => {
     component.repositoryPath = '/path/to/repo';
-    component.sourceBranch = 'develop';
-    component.targetBranch = 'feature/test';
+    component.fromBranch = 'develop';
+    component.intoBranch = 'feature/test';
     
     component.onClear();
     
     expect(component.repositoryPath).toBe('');
-    expect(component.sourceBranch).toBe('main');
-    expect(component.targetBranch).toBe('');
+    expect(component.fromBranch).toBe('main');
+    expect(component.intoBranch).toBe('');
   });
 
   it('should have compare button disabled when fields are empty', () => {
@@ -112,8 +112,8 @@ describe('ComparisonInput', () => {
 
   it('should enable compare button when all fields are filled', async () => {
     component.repositoryPath = '/path/to/repo';
-    component.sourceBranch = 'main';
-    component.targetBranch = 'feature/test';
+    component.fromBranch = 'main';
+    component.intoBranch = 'feature/test';
     fixture.detectChanges();
     await fixture.whenStable();
     

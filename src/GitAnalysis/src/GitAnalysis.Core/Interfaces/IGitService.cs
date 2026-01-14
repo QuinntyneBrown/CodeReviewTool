@@ -13,7 +13,7 @@ namespace GitAnalysis.Core.Interfaces;
 /// </summary>
 public interface IGitService
 {
-    Task<GitDiffResult> GenerateDiffAsync(string repositoryPath, string sourceBranch, string targetBranch, CancellationToken cancellationToken = default);
+    Task<GitDiffResult> GenerateDiffAsync(string repositoryPath, string fromBranch, string intoBranch, CancellationToken cancellationToken = default);
     Task<bool> BranchExistsAsync(string repositoryPath, string branchName, CancellationToken cancellationToken = default);
     Task<IEnumerable<string>> GetBranchesAsync(string repositoryPath, CancellationToken cancellationToken = default);
     Task<IEnumerable<string>> GetFilesInBranchAsync(string repositoryPath, string branchName, CancellationToken cancellationToken = default);

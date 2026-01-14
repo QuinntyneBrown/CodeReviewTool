@@ -44,14 +44,14 @@ public class ComparisonController : ControllerBase
         [FromBody] ComparisonRequestDto dto,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Received comparison request for {Repo} between {Source} and {Target}",
-            dto.RepositoryPath, dto.SourceBranch, dto.TargetBranch);
+        logger.LogInformation("Received comparison request for {Repo} between {From} and {Into}",
+            dto.RepositoryPath, dto.FromBranch, dto.IntoBranch);
 
         var request = new GitComparisonRequest
         {
             RepositoryPath = dto.RepositoryPath,
-            SourceBranch = dto.SourceBranch,
-            TargetBranch = dto.TargetBranch,
+            FromBranch = dto.FromBranch,
+            IntoBranch = dto.IntoBranch,
             UserId = User?.Identity?.Name
         };
 
@@ -83,8 +83,8 @@ public class ComparisonController : ControllerBase
         {
             RequestId = request.RequestId,
             Status = request.Status.ToString(),
-            SourceBranch = request.SourceBranch,
-            TargetBranch = request.TargetBranch,
+            FromBranch = request.FromBranch,
+            IntoBranch = request.IntoBranch,
             CompletedAt = request.CompletedAt,
             ErrorMessage = request.ErrorMessage
         };

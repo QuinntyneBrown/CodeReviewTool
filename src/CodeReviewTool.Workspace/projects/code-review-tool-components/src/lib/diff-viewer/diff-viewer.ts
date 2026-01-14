@@ -18,8 +18,8 @@ import { CodeLine } from '../code-line/code-line';
 })
 export class DiffViewer {
   files = input<DiffFile[]>([]);
-  sourceBranch = input<string>('');
-  targetBranch = input<string>('');
+  fromBranch = input<string>('');
+  intoBranch = input<string>('');
 
   selectedFile: DiffFile | null = null;
 

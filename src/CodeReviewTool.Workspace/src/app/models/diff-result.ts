@@ -5,8 +5,8 @@ export type { DiffFile, DiffLine, DiffHunk, CommentData } from 'code-review-tool
 export interface ComparisonResponse {
   requestId: string;
   status: 'Pending' | 'Processing' | 'Completed' | 'Failed';
-  sourceBranch: string;
-  targetBranch: string;
+  fromBranch: string;
+  intoBranch: string;
   fileDiffs: FileDiffResponse[];
   totalAdditions: number;
   totalDeletions: number;

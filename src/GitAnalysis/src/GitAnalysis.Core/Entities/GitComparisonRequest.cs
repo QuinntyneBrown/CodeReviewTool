@@ -13,8 +13,8 @@ public class GitComparisonRequest
 {
     public Guid RequestId { get; set; }
     public required string RepositoryPath { get; set; }
-    public required string SourceBranch { get; set; }
-    public required string TargetBranch { get; set; }
+    public required string FromBranch { get; set; }
+    public required string IntoBranch { get; set; }
     public string? UserId { get; set; }
     public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
     public GitComparisonStatus Status { get; set; } = GitComparisonStatus.Pending;

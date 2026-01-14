@@ -6,4 +6,4 @@
 
 namespace GitAnalysis.Core.Events;
 
-public record ComparisonRequestedEvent(Guid RequestId, string RepositoryPath, string SourceBranch, string TargetBranch, string? UserId, DateTime RequestedAt);
+public record ComparisonRequestedEvent(Guid RequestId, string RepositoryPath, string FromBranch, string IntoBranch, string? UserId, DateTime RequestedAt);

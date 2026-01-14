@@ -13,8 +13,8 @@ public class ComparisonResultDto
 {
     public Guid RequestId { get; set; }
     public string Status { get; set; } = string.Empty;
-    public string SourceBranch { get; set; } = string.Empty;
-    public string TargetBranch { get; set; } = string.Empty;
+    public string FromBranch { get; set; } = string.Empty;
+    public string IntoBranch { get; set; } = string.Empty;
     public List<FileDiffDto> FileDiffs { get; set; } = new();
     public int TotalAdditions { get; set; }
     public int TotalDeletions { get; set; }

@@ -8,8 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 
 export interface ComparisonRequest {
   repositoryPath: string;
-  sourceBranch: string;
-  targetBranch: string;
+  fromBranch: string;
+  intoBranch: string;
 }
 
 @Component({
@@ -27,24 +27,24 @@ export interface ComparisonRequest {
 })
 export class ComparisonInput {
   repositoryPath = '';
-  sourceBranch = 'main';
-  targetBranch = '';
+  fromBranch = 'main';
+  intoBranch = '';
 
   compare = output<ComparisonRequest>();
 
   onCompare(): void {
-    if (this.repositoryPath && this.sourceBranch && this.targetBranch) {
+    if (this.repositoryPath && this.fromBranch && this.intoBranch) {
       this.compare.emit({
         repositoryPath: this.repositoryPath,
-        sourceBranch: this.sourceBranch,
-        targetBranch: this.targetBranch
+        fromBranch: this.fromBranch,
+        intoBranch: this.intoBranch
       });
     }
   }
 
   onClear(): void {
     this.repositoryPath = '';
-    this.sourceBranch = 'main';
-    this.targetBranch = '';
+    this.fromBranch = 'main';
+    this.intoBranch = '';
   }
 }

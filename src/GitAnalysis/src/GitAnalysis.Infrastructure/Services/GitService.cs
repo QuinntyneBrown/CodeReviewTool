@@ -26,16 +26,16 @@ public class GitService : IGitService
         this.gitIgnoreEngine = gitIgnoreEngine ?? throw new ArgumentNullException(nameof(gitIgnoreEngine));
     }
 
-    public async Task<GitDiffResult> GenerateDiffAsync(string repositoryPath, string sourceBranch, string targetBranch, CancellationToken cancellationToken = default)
+    public async Task<GitDiffResult> GenerateDiffAsync(string repositoryPath, string fromBranch, string intoBranch, CancellationToken cancellationToken = default)
     {
         return await Task.Run(() =>
         {
             using var repo = new Repository(repositoryPath);
             
-            var sourceCommit = repo.Branches[sourceBranch]?.Tip 
-                ?? throw new InvalidOperationException($"Branch '{sourceBranch}' not found");
-            var targetCommit = repo.Branches[targetBranch]?.Tip 
-                ?? throw new InvalidOperationException($"Branch '{targetBranch}' not found");
+            var sourceCommit = repo.Branches[fromBranch]?.Tip 
+                ?? throw new InvalidOperationException($"Branch '{fromBranch}' not found");
+            var targetCommit = repo.Branches[intoBranch]?.Tip 
+                ?? throw new InvalidOperationException($"Branch '{intoBranch}' not found");
 
             var diff = repo.Diff.Compare<Patch>(targetCommit.Tree, sourceCommit.Tree);
             var result = new GitDiffResult { RequestId = Guid.NewGuid() };
@@ -84,8 +84,8 @@ public class GitService : IGitService
                     result.TotalModifications++;
             }
 
-            logger.LogInformation("Generated diff between {Source} and {Target}: {Files} files changed",
-                sourceBranch, targetBranch, result.FileDiffs.Count);
+            logger.LogInformation("Generated diff between {From} and {Into}: {Files} files changed",
+                fromBranch, intoBranch, result.FileDiffs.Count);
 
             return result;
         }, cancellationToken);

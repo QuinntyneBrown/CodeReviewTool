@@ -4,9 +4,9 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1 class="review__title">Code Review</h1>
-    @if ((sourceBranch$ | async) && (targetBranch$ | async)) {
+    @if ((fromBranch$ | async) && (intoBranch$ | async)) {
       <span class="review__branch-info">
-        {{ sourceBranch$ | async }} → {{ targetBranch$ | async }}
+        {{ fromBranch$ | async }} → {{ intoBranch$ | async }}
       </span>
     }
   </header>
@@ -32,8 +32,8 @@
     @if (!(loading$ | async) && !(error$ | async)) {
       <crt-diff-viewer
         [files]="(files$ | async) || []"
-        [sourceBranch]="(sourceBranch$ | async) || ''"
-        [targetBranch]="(targetBranch$ | async) || ''">
+        [fromBranch]="(fromBranch$ | async) || ''"
+        [intoBranch]="(intoBranch$ | async) || ''">
       </crt-diff-viewer>
     }
   </main>
