@@ -24,14 +24,21 @@ var repositoryOption = new Option<string?>(
     description: "Path to the Git repository (default: current directory)")
 { IsRequired = false };
 
+var verboseOption = new Option<bool>(
+    aliases: new[] { "--verbose", "-v" },
+    description: "Enable verbose logging output",
+    getDefaultValue: () => false)
+{ IsRequired = false };
+
 var rootCommand = new RootCommand("Code Review Tool - Compare Git branches")
 {
     fromOption,
     intoOption,
-    repositoryOption
+    repositoryOption,
+    verboseOption
 };
 
-rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? repoPath) =>
+rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? repoPath, bool verbose) =>
 {
     try
     {
@@ -61,7 +68,8 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
 
         // Setup DI
         var services = new ServiceCollection();
-        services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning));
+        var logLevel = verbose ? Microsoft.Extensions.Logging.LogLevel.Information : Microsoft.Extensions.Logging.LogLevel.Warning;
+        services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(logLevel));
         services.AddSingleton<IGitIgnoreEngine, GitIgnoreEngine>();
         services.AddSingleton<IGitService, GitService>();
         
@@ -165,7 +173,7 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
         Console.ResetColor();
         Environment.Exit(1);
     }
-}, fromOption, intoOption, repositoryOption);
+}, fromOption, intoOption, repositoryOption, verboseOption);
 
 return await rootCommand.InvokeAsync(args);
 

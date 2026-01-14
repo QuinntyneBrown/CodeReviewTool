@@ -70,6 +70,9 @@ dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- -f feat
 # Specify a different repository
 dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- -f main -i feature/test -r /path/to/repo
 
+# Enable verbose logging for debugging
+dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- -f feature/my-branch -i develop --verbose
+
 # View help
 dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- --help
 ```
@@ -79,6 +82,7 @@ dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- --help
 - `-f, --from <branch>` - The branch to compare from (default: current branch)
 - `-i, --into <branch>` - The branch to compare into (default: main)
 - `-r, --repository <path>` - Path to the Git repository (default: current directory)
+- `-v, --verbose` - Enable verbose logging output for debugging
 
 The CLI will display:
 - Number of files changed
