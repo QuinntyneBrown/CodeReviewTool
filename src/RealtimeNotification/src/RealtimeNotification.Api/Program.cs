@@ -98,3 +98,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.Run();
+
+// Make Program class accessible to tests
+namespace RealtimeNotification.Api
+{
+    public partial class Program { }
+}
