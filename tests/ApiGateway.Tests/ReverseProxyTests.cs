@@ -144,7 +144,7 @@ public class ReverseProxyTests : IClassFixture<WebApplicationFactory<Program>>
 
         foreach (var route in config.Routes)
         {
-            Assert.True(clusterIds.Contains(route.ClusterId), 
+            Assert.True(clusterIds.Contains(route.ClusterId ?? string.Empty), 
                 $"Route {route.RouteId} references cluster {route.ClusterId} which doesn't exist");
         }
     }
