@@ -37,3 +37,9 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Make Program class accessible to tests
+namespace GitAnalysis.Api
+{
+    public partial class Program { }
+}

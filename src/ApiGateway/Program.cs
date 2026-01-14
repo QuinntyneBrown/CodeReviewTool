@@ -26,5 +26,8 @@ app.MapReverseProxy();
 app.Run();
 
 // Make Program class accessible to tests
-public partial class Program { }
+namespace ApiGateway
+{
+    public partial class Program { }
+}
 
