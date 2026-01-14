@@ -1,0 +1,69 @@
+Summary
+  Generated on: 01/14/2026 - 12:04:56
+  Coverage date: 01/14/2026 - 11:56:04 - 01/14/2026 - 12:04:15
+  Parser: MultiReport (16x Cobertura)
+  Assemblies: 7
+  Classes: 35
+  Files: 31
+  Line coverage: 57.5%
+  Covered lines: 389
+  Uncovered lines: 287
+  Coverable lines: 676
+  Total lines: 1454
+  Branch coverage: 42.2% (60 of 142)
+  Covered branches: 60
+  Total branches: 142
+  Method coverage: 51.1% (68 of 133)
+  Full method coverage: 45.1% (60 of 133)
+  Covered methods: 68
+  Fully covered methods: 60
+  Total methods: 133
+
+ApiGateway.ApiGateway                                                         100%
+  Program                                                                     100%
+
+GitAnalysis.Api                                                              75.7%
+  GitAnalysis.Api.Controllers.ComparisonController                           67.5%
+  Program                                                                     100%
+
+GitAnalysis.Core                                                             43.1%
+  GitAnalysis.Core.DTOs.ComparisonRequestDto                                  100%
+  GitAnalysis.Core.DTOs.ComparisonResultDto                                   100%
+  GitAnalysis.Core.DTOs.FileDiffDto                                             0%
+  GitAnalysis.Core.DTOs.LineDiffDto                                             0%
+  GitAnalysis.Core.Entities.FileDiff                                            0%
+  GitAnalysis.Core.Entities.GitComparisonRequest                              100%
+  GitAnalysis.Core.Entities.GitDiffResult                                       0%
+  GitAnalysis.Core.Entities.GitIgnoreRule                                       0%
+  GitAnalysis.Core.Entities.LineDiff                                            0%
+  GitAnalysis.Core.Events.ComparisonCompletedEvent                              0%
+  GitAnalysis.Core.Events.ComparisonFailedEvent                                 0%
+  GitAnalysis.Core.Events.ComparisonRequestedEvent                              0%
+
+GitAnalysis.Infrastructure                                                   43.7%
+  GitAnalysis.Infrastructure.BackgroundServices.ComparisonProcessorService   79.6%
+  GitAnalysis.Infrastructure.ConfigureServices                                100%
+  GitAnalysis.Infrastructure.Repositories.ComparisonRequestRepository        69.5%
+  GitAnalysis.Infrastructure.Repositories.DiffResultRepository                 10%
+  GitAnalysis.Infrastructure.Services.GitIgnoreEngine                           0%
+  GitAnalysis.Infrastructure.Services.GitService                             42.3%
+
+RealtimeNotification.Api                                                     42.1%
+  Program                                                                    87.5%
+  RealtimeNotification.Api.Hubs.NotificationHub                                 0%
+  RealtimeNotification.Api.Services.SignalRNotificationPublisher             19.5%
+
+RealtimeNotification.Core                                                    46.1%
+  RealtimeNotification.Core.DTOs.NotificationDto                                0%
+  RealtimeNotification.Core.DTOs.SubscriptionRequestDto                         0%
+  RealtimeNotification.Core.Entities.NotificationConnection                   100%
+  RealtimeNotification.Core.Entities.NotificationMessage                        0%
+  RealtimeNotification.Core.Entities.Subscription                             100%
+  RealtimeNotification.Core.Events.ConnectionClosedEvent                        0%
+  RealtimeNotification.Core.Events.ConnectionEstablishedEvent                   0%
+  RealtimeNotification.Core.Events.NotificationSentEvent                        0%
+
+RealtimeNotification.Infrastructure                                          96.1%
+  RealtimeNotification.Infrastructure.ConfigureServices                       100%
+  RealtimeNotification.Infrastructure.Services.ConnectionManager              100%
+  RealtimeNotification.Infrastructure.Services.SubscriptionManager             94%
