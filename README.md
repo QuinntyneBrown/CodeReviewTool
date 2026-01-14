@@ -4,7 +4,7 @@ A comprehensive code review and analysis platform built with .NET 9 and Angular.
 
 ## Architecture
 
-The application follows a microservices architecture with an API Gateway pattern:
+The application follows a microservices architecture with an API Gateway pattern and includes a CLI tool for command-line usage:
 
 ### Services
 
@@ -29,6 +29,11 @@ The application follows a microservices architecture with an API Gateway pattern
    - Communicates exclusively through the API Gateway
    - Runs on `http://localhost:4200` (development)
 
+5. **CLI Tool** (`src/CodeReviewTool.Cli`)
+   - Command-line interface for branch comparison
+   - Standalone tool that can be used without the web interface
+   - Generates formatted console output
+
 ## Getting Started
 
 ### Prerequisites
@@ -47,6 +52,39 @@ cd CodeReviewTool
 # Build all projects
 dotnet build CodeReviewTool.sln
 ```
+
+### Using the CLI Tool
+
+The CLI tool (`crt`) allows you to compare Git branches directly from the command line:
+
+```bash
+# Build the CLI
+dotnet build src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj
+
+# Compare branches (defaults: from=current branch, into=main)
+dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj
+
+# Specify branches explicitly
+dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- -f feature/my-branch -i develop
+
+# Specify a different repository
+dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- -f main -i feature/test -r /path/to/repo
+
+# View help
+dotnet run --project src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj -- --help
+```
+
+#### CLI Options
+
+- `-f, --from <branch>` - The branch to compare from (default: current branch)
+- `-i, --into <branch>` - The branch to compare into (default: main)
+- `-r, --repository <path>` - Path to the Git repository (default: current directory)
+
+The CLI will display:
+- Number of files changed
+- Total additions and deletions
+- List of changed files with their individual stats
+- Color-coded output for better readability
 
 ### Running the Services
 
@@ -151,6 +189,9 @@ dotnet test src/GitAnalysis/GitAnalysis.sln
 
 # Realtime Notification Tests
 dotnet test src/RealtimeNotification/RealtimeNotification.sln
+
+# CLI Tests
+dotnet test tests/CodeReviewTool.Cli.Tests/CodeReviewTool.Cli.Tests.csproj
 ```
 
 ### Test Coverage
@@ -174,12 +215,14 @@ CodeReviewTool/
 │   ├── ApiGateway/                    # API Gateway service
 │   ├── GitAnalysis/                   # Git analysis microservice
 │   ├── RealtimeNotification/          # Notification microservice
-│   └── CodeReviewTool.Workspace/      # Angular frontend
+│   ├── CodeReviewTool.Workspace/      # Angular frontend
+│   └── CodeReviewTool.Cli/            # CLI tool
 ├── tests/
 │   ├── ApiGateway.Tests/              # API Gateway tests
 │   ├── GitAnalysis/                   # Git Analysis tests
 │   ├── RealtimeNotification/          # Notification tests
-│   └── CodeReviewTool.Tests/          # Integration tests
+│   ├── CodeReviewTool.Tests/          # Integration tests
+│   └── CodeReviewTool.Cli.Tests/      # CLI tests
 └── CodeReviewTool.sln                 # Main solution file
 ```
 
