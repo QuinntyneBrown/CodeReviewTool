@@ -68,13 +68,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configure SignalR with Redis backplane for horizontal scaling
-var signalRBuilder = builder.Services.AddSignalR();
-var redisConnection = builder.Configuration.GetConnectionString("Redis");
-if (!string.IsNullOrEmpty(redisConnection))
-{
-    signalRBuilder.AddStackExchangeRedis(redisConnection);
-}
+builder.Services.AddSignalR();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddSingleton<INotificationPublisher, SignalRNotificationPublisher>();
