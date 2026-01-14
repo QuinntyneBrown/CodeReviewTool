@@ -1,0 +1,247 @@
+# Code Review Tool
+
+A comprehensive code review and analysis platform built with .NET 9 and Angular.
+
+## Architecture
+
+The application follows a microservices architecture with an API Gateway pattern:
+
+### Services
+
+1. **API Gateway** (`src/ApiGateway`)
+   - Entry point for all frontend requests
+   - Routes requests to appropriate backend services
+   - Provides CORS configuration for frontend communication
+   - Built with [YARP (Yet Another Reverse Proxy)](https://microsoft.github.io/reverse-proxy/)
+
+2. **Git Analysis Service** (`src/GitAnalysis`)
+   - Analyzes Git repository differences
+   - Compares branches and generates detailed diff reports
+   - Endpoints: `/api/comparison/*`
+
+3. **Realtime Notification Service** (`src/RealtimeNotification`)
+   - Provides real-time notifications via SignalR
+   - WebSocket support for live updates
+   - Hub endpoint: `/notifications`
+
+4. **Frontend** (`src/CodeReviewTool.Workspace`)
+   - Angular-based user interface
+   - Communicates exclusively through the API Gateway
+   - Runs on `http://localhost:4200` (development)
+
+## Getting Started
+
+### Prerequisites
+
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [Node.js 18+](https://nodejs.org/) (for frontend)
+- Git
+
+### Building the Solution
+
+```bash
+# Clone the repository
+git clone https://github.com/QuinntyneBrown/CodeReviewTool.git
+cd CodeReviewTool
+
+# Build all projects
+dotnet build CodeReviewTool.sln
+```
+
+### Running the Services
+
+#### 1. Start the Backend Services
+
+```bash
+# Terminal 1: Git Analysis Service (Port 5001)
+cd src/GitAnalysis/src/GitAnalysis.Api
+dotnet run
+
+# Terminal 2: Realtime Notification Service (Port 5002)
+cd src/RealtimeNotification/src/RealtimeNotification.Api
+dotnet run
+
+# Terminal 3: API Gateway (Port 5000)
+cd src/ApiGateway
+dotnet run
+```
+
+#### 2. Start the Frontend
+
+```bash
+# Terminal 4: Angular Frontend
+cd src/CodeReviewTool.Workspace
+npm install
+npm start
+```
+
+The application will be available at `http://localhost:4200`.
+
+## API Gateway Configuration
+
+The API Gateway is configured via `appsettings.json` and uses YARP for reverse proxying:
+
+### Routes
+
+- **Git Analysis**: `/api/comparison/*` → `http://localhost:5001`
+- **Notifications**: `/notifications/*` → `http://localhost:5002`
+
+### CORS
+
+Configured to allow requests from `http://localhost:4200` (frontend) with:
+- Any HTTP method
+- Any headers
+- Credentials support
+
+### Configuration Example
+
+```json
+{
+  "ReverseProxy": {
+    "Routes": {
+      "git-analysis-route": {
+        "ClusterId": "git-analysis-cluster",
+        "Match": {
+          "Path": "/api/comparison/{**catch-all}"
+        }
+      },
+      "realtime-notification-route": {
+        "ClusterId": "realtime-notification-cluster",
+        "Match": {
+          "Path": "/notifications/{**catch-all}"
+        }
+      }
+    },
+    "Clusters": {
+      "git-analysis-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5001"
+          }
+        }
+      },
+      "realtime-notification-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5002"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Testing
+
+### Running All Tests
+
+```bash
+dotnet test CodeReviewTool.sln
+```
+
+### Running Specific Test Projects
+
+```bash
+# API Gateway Tests
+dotnet test tests/ApiGateway.Tests/ApiGateway.Tests.csproj
+
+# Git Analysis Tests
+dotnet test src/GitAnalysis/GitAnalysis.sln
+
+# Realtime Notification Tests
+dotnet test src/RealtimeNotification/RealtimeNotification.sln
+```
+
+### Test Coverage
+
+```bash
+# Run tests with coverage
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+The API Gateway test suite achieves >80% code coverage with comprehensive tests for:
+- Routing configuration
+- CORS policies
+- Reverse proxy functionality
+- Backend service integration
+
+## Project Structure
+
+```
+CodeReviewTool/
+├── src/
+│   ├── ApiGateway/                    # API Gateway service
+│   ├── GitAnalysis/                   # Git analysis microservice
+│   ├── RealtimeNotification/          # Notification microservice
+│   └── CodeReviewTool.Workspace/      # Angular frontend
+├── tests/
+│   ├── ApiGateway.Tests/              # API Gateway tests
+│   ├── GitAnalysis/                   # Git Analysis tests
+│   ├── RealtimeNotification/          # Notification tests
+│   └── CodeReviewTool.Tests/          # Integration tests
+└── CodeReviewTool.sln                 # Main solution file
+```
+
+## Development
+
+### API Gateway
+
+The API Gateway uses YARP for high-performance reverse proxying. Key features:
+
+- **Request Forwarding**: Transparent proxying to backend services
+- **Path Matching**: Route-based request routing
+- **Load Balancing**: Support for multiple destination instances
+- **Health Checks**: Monitor backend service availability
+
+### Adding New Routes
+
+To add a new route to the API Gateway:
+
+1. Add route configuration in `appsettings.json`:
+
+```json
+{
+  "ReverseProxy": {
+    "Routes": {
+      "new-service-route": {
+        "ClusterId": "new-service-cluster",
+        "Match": {
+          "Path": "/api/newservice/{**catch-all}"
+        }
+      }
+    },
+    "Clusters": {
+      "new-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5003"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+2. Add tests in `tests/ApiGateway.Tests/`
+
+3. Update this README with the new route information
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.txt file for details.
+
+## Contact
+
+Quinntyne Brown - [@QuinntyneBrown](https://github.com/QuinntyneBrown)
+
+Project Link: [https://github.com/QuinntyneBrown/CodeReviewTool](https://github.com/QuinntyneBrown/CodeReviewTool)
