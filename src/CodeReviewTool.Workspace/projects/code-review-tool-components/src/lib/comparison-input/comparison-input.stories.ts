@@ -7,8 +7,8 @@ const meta: Meta<ComparisonInput> = {
   tags: ['autodocs'],
   argTypes: {
     repositoryPath: { control: 'text' },
-    sourceBranch: { control: 'text' },
-    targetBranch: { control: 'text' },
+    fromBranch: { control: 'text' },
+    intoBranch: { control: 'text' },
   },
 };
 
@@ -18,23 +18,23 @@ type Story = StoryObj<ComparisonInput>;
 export const Empty: Story = {
   args: {
     repositoryPath: '',
-    sourceBranch: 'main',
-    targetBranch: '',
+    fromBranch: 'main',
+    intoBranch: '',
   },
 };
 
 export const WithData: Story = {
   args: {
     repositoryPath: '/home/user/projects/my-repo',
-    sourceBranch: 'main',
-    targetBranch: 'feature/new-feature',
+    fromBranch: 'main',
+    intoBranch: 'feature/new-feature',
   },
 };
 
 export const CustomBranches: Story = {
   args: {
     repositoryPath: '/path/to/repository',
-    sourceBranch: 'develop',
-    targetBranch: 'feature/user-auth',
+    fromBranch: 'develop',
+    intoBranch: 'feature/user-auth',
   },
 };

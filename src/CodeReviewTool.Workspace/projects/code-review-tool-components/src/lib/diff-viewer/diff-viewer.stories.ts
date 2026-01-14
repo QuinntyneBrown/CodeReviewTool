@@ -60,23 +60,23 @@ type Story = StoryObj<DiffViewer>;
 export const WithFiles: Story = {
   args: {
     files: mockDiffFiles,
-    sourceBranch: 'main',
-    targetBranch: 'feature/new-feature',
+    fromBranch: 'main',
+    intoBranch: 'feature/new-feature',
   },
 };
 
 export const Empty: Story = {
   args: {
     files: [],
-    sourceBranch: 'main',
-    targetBranch: 'feature/empty',
+    fromBranch: 'main',
+    intoBranch: 'feature/empty',
   },
 };
 
 export const SingleFile: Story = {
   args: {
     files: [mockDiffFiles[0]],
-    sourceBranch: 'develop',
-    targetBranch: 'feature/header-refactor',
+    fromBranch: 'develop',
+    intoBranch: 'feature/header-refactor',
   },
 };

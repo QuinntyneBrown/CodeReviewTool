@@ -63,8 +63,8 @@ public class ComparisonProcessorService : BackgroundService
 
                 var result = await gitService.GenerateDiffAsync(
                     request.RepositoryPath,
-                    request.SourceBranch,
-                    request.TargetBranch,
+                    request.FromBranch,
+                    request.IntoBranch,
                     stoppingToken);
 
                 await diffResultRepository.SaveAsync(request.RequestId, result, stoppingToken);

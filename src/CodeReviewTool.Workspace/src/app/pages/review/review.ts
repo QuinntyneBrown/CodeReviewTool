@@ -13,8 +13,8 @@ import { ComparisonResponse, LineDiffResponse } from '../../models/diff-result';
 
 interface ReviewState {
   files: DiffFile[];
-  sourceBranch: string;
-  targetBranch: string;
+  fromBranch: string;
+  intoBranch: string;
   loading: boolean;
   error: string | null;
 }
@@ -34,8 +34,8 @@ export class Review implements OnInit, OnDestroy {
 
   private readonly stateSubject = new BehaviorSubject<ReviewState>({
     files: [],
-    sourceBranch: '',
-    targetBranch: '',
+    fromBranch: '',
+    intoBranch: '',
     loading: true,
     error: null,
   });
@@ -43,8 +43,8 @@ export class Review implements OnInit, OnDestroy {
   readonly state$ = this.stateSubject.asObservable();
 
   readonly files$ = this.state$.pipe(map((s) => s.files));
-  readonly sourceBranch$ = this.state$.pipe(map((s) => s.sourceBranch));
-  readonly targetBranch$ = this.state$.pipe(map((s) => s.targetBranch));
+  readonly fromBranch$ = this.state$.pipe(map((s) => s.fromBranch));
+  readonly intoBranch$ = this.state$.pipe(map((s) => s.intoBranch));
   readonly loading$ = this.state$.pipe(map((s) => s.loading));
   readonly error$ = this.state$.pipe(map((s) => s.error));
 
@@ -78,8 +78,8 @@ export class Review implements OnInit, OnDestroy {
     const files = this.mapResponseToFiles(response);
     this.updateState({
       files,
-      sourceBranch: response.sourceBranch,
-      targetBranch: response.targetBranch,
+      fromBranch: response.fromBranch,
+      intoBranch: response.intoBranch,
       loading: false,
       error: response.errorMessage || null,
     });

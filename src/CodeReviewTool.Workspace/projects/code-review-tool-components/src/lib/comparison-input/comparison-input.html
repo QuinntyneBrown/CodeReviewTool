@@ -22,22 +22,22 @@
 
     <div class="comparison-input__branch-group">
       <mat-form-field class="comparison-input__field" appearance="outline">
-        <mat-label>Source Branch</mat-label>
+        <mat-label>From Branch</mat-label>
         <input 
           matInput 
-          [(ngModel)]="sourceBranch" 
-          name="sourceBranch"
+          [(ngModel)]="fromBranch" 
+          name="fromBranch"
           placeholder="main"
           required
         >
       </mat-form-field>
 
       <mat-form-field class="comparison-input__field" appearance="outline">
-        <mat-label>Target Branch</mat-label>
+        <mat-label>Into Branch</mat-label>
         <input 
           matInput 
-          [(ngModel)]="targetBranch" 
-          name="targetBranch"
+          [(ngModel)]="intoBranch" 
+          name="intoBranch"
           placeholder="feature/new-feature"
           required
         >
@@ -56,7 +56,7 @@
         type="submit" 
         mat-raised-button 
         color="primary"
-        [disabled]="!repositoryPath || !sourceBranch || !targetBranch"
+        [disabled]="!repositoryPath || !fromBranch || !intoBranch"
       >
         Compare
       </button>
