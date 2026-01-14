@@ -30,7 +30,6 @@ export class SignalRService implements OnDestroy {
 
     this.connection = new signalR.HubConnectionBuilder()
       .withUrl(environment.signalRHubUrl, {
-        skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })
       .withAutomaticReconnect({

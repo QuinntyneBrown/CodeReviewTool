@@ -81,11 +81,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<NotificationHub>("/notifications");
+
+var notificationsHub = app.MapHub<NotificationHub>("/notifications");
+
+if (!app.Environment.IsDevelopment())
+{
+    notificationsHub.RequireAuthorization();
+}
 
 app.Run();

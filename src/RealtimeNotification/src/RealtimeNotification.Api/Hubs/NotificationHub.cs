@@ -4,7 +4,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using RealtimeNotification.Core.DTOs;
 using RealtimeNotification.Core.Entities;
@@ -16,7 +15,6 @@ namespace RealtimeNotification.Api.Hubs;
 /// SignalR hub for real-time notifications.
 /// Supports JWT authentication and automatic reconnection.
 /// </summary>
-[Authorize]
 public class NotificationHub : Hub
 {
     private readonly ILogger<NotificationHub> logger;
