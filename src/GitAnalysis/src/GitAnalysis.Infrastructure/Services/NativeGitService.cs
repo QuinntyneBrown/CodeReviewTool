@@ -222,7 +222,8 @@ public class NativeGitService : IGitService
                 var parts = line.Split(' ');
                 if (parts.Length >= 4)
                 {
-                    var filePath = parts[2].TrimStart('a', '/');
+                    // Remove 'a/' prefix (parts[2] is like 'a/path/to/file')
+                    var filePath = parts[2].StartsWith("a/") ? parts[2].Substring(2) : parts[2];
                     
                     if (fileStats.TryGetValue(filePath, out var stats))
                     {
