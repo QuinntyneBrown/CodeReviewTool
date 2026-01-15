@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 using GitAnalysis.Core.Interfaces;
 using GitAnalysis.Infrastructure.Services;
 using GitAnalysis.Core.Services.StaticAnalysis;
+using GitAnalysis.Core.Services.StaticAnalysis.CSharp;
+using GitAnalysis.Core.Services.StaticAnalysis.Angular;
+using GitAnalysis.Core.Services.StaticAnalysis.Scss;
 using GitAnalysis.Core.Entities;
 
 var fromOption = new Option<string?>(
@@ -89,10 +92,16 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
         services.AddSingleton<IGitIgnoreEngine, GitIgnoreEngine>();
         services.AddSingleton<IGitService, GitService>();
         services.AddSingleton<IStaticAnalysisService, StaticAnalysisService>();
+        services.AddSingleton<ICSharpStaticAnalysisService, CSharpStaticAnalysisService>();
+        services.AddSingleton<IAngularStaticAnalysisService, AngularStaticAnalysisService>();
+        services.AddSingleton<IScssStaticAnalysisService, ScssStaticAnalysisService>();
         
         var serviceProvider = services.BuildServiceProvider();
         var gitService = serviceProvider.GetRequiredService<IGitService>();
         var analysisService = serviceProvider.GetRequiredService<IStaticAnalysisService>();
+        var csharpAnalysisService = serviceProvider.GetRequiredService<ICSharpStaticAnalysisService>();
+        var angularAnalysisService = serviceProvider.GetRequiredService<IAngularStaticAnalysisService>();
+        var scssAnalysisService = serviceProvider.GetRequiredService<IScssStaticAnalysisService>();
 
         // Display comparison info
         Console.WriteLine();
@@ -234,13 +243,13 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
                 var changedFilesToAnalyze = result.FileDiffs
                     .Where(f => f.ChangeType != FileChangeType.Deleted)
                     .Select(f => Path.Combine(repositoryPath, f.FilePath))
-                    .Where(f => File.Exists(f) && (f.EndsWith(".cs") || f.EndsWith(".ts") || f.EndsWith(".js")))
+                    .Where(f => File.Exists(f) && (f.EndsWith(".cs") || f.EndsWith(".ts") || f.EndsWith(".js") || f.EndsWith(".html") || f.EndsWith(".scss")))
                     .ToList();
                 
                 if (changedFilesToAnalyze.Count == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine("No analyzable files found (only .cs, .ts, and .js files are supported).");
+                    Console.WriteLine("No analyzable files found (only .cs, .ts, .js, .html, and .scss files are supported).");
                     Console.ResetColor();
                 }
                 else
@@ -248,14 +257,13 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
                     Console.WriteLine($"Analyzing {changedFilesToAnalyze.Count} file(s)...");
                     Console.WriteLine();
                     
-                    // For each changed file, run analysis on the entire project/repository
-                    // The analysis service will analyze the whole context and we'll filter for changed files
-                    GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisResult? projectAnalysis = null;
+                    var allViolations = new List<GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisViolation>();
+                    var allWarnings = new List<GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisWarning>();
                     
                     try
                     {
-                        // Analyze from the first changed file (the service will find the project root)
-                        projectAnalysis = await analysisService.AnalyzeAsync(changedFilesToAnalyze.First());
+                        // Run general static analysis (for copyright headers, message design, etc.)
+                        var projectAnalysis = await analysisService.AnalyzeAsync(changedFilesToAnalyze.First());
                         
                         // Filter violations for only changed files
                         var changedFileNames = new HashSet<string>(
@@ -271,8 +279,143 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
                             .Where(w => w.FilePath != null && changedFileNames.Contains(Path.GetFileName(w.FilePath)))
                             .ToList();
                         
+                        allViolations.AddRange(relevantViolations);
+                        allWarnings.AddRange(relevantWarnings);
+                        
+                        // Run C# specific analysis on .cs files
+                        var csFiles = changedFilesToAnalyze.Where(f => f.EndsWith(".cs")).ToList();
+                        if (csFiles.Count > 0)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine($"Running C# analysis on {csFiles.Count} file(s)...");
+                            Console.ResetColor();
+                            
+                            var csharpResult = await csharpAnalysisService.AnalyzeAsync(repositoryPath);
+                            
+                            // Convert C# analysis results to our common format
+                            foreach (var issue in csharpResult.Issues.Where(i => csFiles.Any(f => f.EndsWith(i.FilePath, StringComparison.OrdinalIgnoreCase))))
+                            {
+                                if (issue.Severity == GitAnalysis.Core.Services.StaticAnalysis.Models.IssueSeverity.Error)
+                                {
+                                    allViolations.Add(new GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisViolation
+                                    {
+                                        RuleId = issue.RuleId,
+                                        SpecSource = "roslyn-analysis",
+                                        Severity = issue.Severity,
+                                        Message = issue.Message,
+                                        FilePath = issue.FilePath,
+                                        LineNumber = issue.Line,
+                                        SuggestedFix = issue.SuggestedFix
+                                    });
+                                }
+                                else
+                                {
+                                    allWarnings.Add(new GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisWarning
+                                    {
+                                        RuleId = issue.RuleId,
+                                        SpecSource = "roslyn-analysis",
+                                        Message = issue.Message,
+                                        FilePath = issue.FilePath,
+                                        LineNumber = issue.Line,
+                                        Recommendation = issue.SuggestedFix
+                                    });
+                                }
+                            }
+                        }
+                        
+                        // Run Angular specific analysis if angular.json exists
+                        var angularRoot = angularAnalysisService.FindWorkspaceRoot(repositoryPath);
+                        if (angularRoot != null)
+                        {
+                            var tsFiles = changedFilesToAnalyze.Where(f => f.EndsWith(".ts") || f.EndsWith(".html")).ToList();
+                            if (tsFiles.Count > 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.WriteLine($"Running Angular analysis on {tsFiles.Count} file(s)...");
+                                Console.ResetColor();
+                                
+                                var angularResult = await angularAnalysisService.AnalyzeAsync(angularRoot);
+                                
+                                // Convert Angular analysis results
+                                foreach (var issue in angularResult.Issues.Where(i => !string.IsNullOrEmpty(i.FilePath) && tsFiles.Any(f => f.Contains(i.FilePath, StringComparison.OrdinalIgnoreCase))))
+                                {
+                                    if (issue.Severity == GitAnalysis.Core.Services.StaticAnalysis.Models.IssueSeverity.Error)
+                                    {
+                                        allViolations.Add(new GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisViolation
+                                        {
+                                            RuleId = issue.Category,
+                                            SpecSource = "angular-analysis",
+                                            Severity = issue.Severity,
+                                            Message = issue.Message,
+                                            FilePath = issue.FilePath,
+                                            LineNumber = issue.Line,
+                                            SuggestedFix = issue.Suggestion
+                                        });
+                                    }
+                                    else
+                                    {
+                                        allWarnings.Add(new GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisWarning
+                                        {
+                                            RuleId = issue.Category,
+                                            SpecSource = "angular-analysis",
+                                            Message = issue.Message,
+                                            FilePath = issue.FilePath,
+                                            LineNumber = issue.Line,
+                                            Recommendation = issue.Suggestion
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Run SCSS specific analysis on .scss files
+                        var scssFiles = changedFilesToAnalyze.Where(f => f.EndsWith(".scss")).ToList();
+                        if (scssFiles.Count > 0)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine($"Running SCSS analysis on {scssFiles.Count} file(s)...");
+                            Console.ResetColor();
+                            
+                            foreach (var scssFile in scssFiles)
+                            {
+                                var scssResult = await scssAnalysisService.AnalyzeFileAsync(scssFile);
+                                
+                                // Convert SCSS issues
+                                foreach (var issue in scssResult.Issues)
+                                {
+                                    if (issue.Severity == GitAnalysis.Core.Services.StaticAnalysis.Models.IssueSeverity.Error)
+                                    {
+                                        allViolations.Add(new GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisViolation
+                                        {
+                                            RuleId = issue.Code,
+                                            SpecSource = $"scss-analysis ({issue.Rule})",
+                                            Severity = issue.Severity,
+                                            Message = issue.Message,
+                                            FilePath = Path.GetFileName(scssFile),
+                                            LineNumber = issue.Line,
+                                            SuggestedFix = issue.SourceSnippet
+                                        });
+                                    }
+                                    else
+                                    {
+                                        allWarnings.Add(new GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisWarning
+                                        {
+                                            RuleId = issue.Code,
+                                            SpecSource = $"scss-analysis ({issue.Rule})",
+                                            Message = issue.Message,
+                                            FilePath = Path.GetFileName(scssFile),
+                                            LineNumber = issue.Line,
+                                            Recommendation = issue.SourceSnippet
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        
+                        Console.WriteLine();
+                        
                         // Display results
-                        if (relevantViolations.Count == 0 && relevantWarnings.Count == 0)
+                        if (allViolations.Count == 0 && allWarnings.Count == 0)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("✓ No issues found in changed files!");
@@ -280,14 +423,14 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
                         }
                         else
                         {
-                            if (relevantViolations.Count > 0)
+                            if (allViolations.Count > 0)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine($"Found {relevantViolations.Count} violation(s):");
+                                Console.WriteLine($"Found {allViolations.Count} violation(s):");
                                 Console.WriteLine();
                                 Console.ResetColor();
                                 
-                                foreach (var violation in relevantViolations)
+                                foreach (var violation in allViolations)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
                                     Console.Write("  ✗ ");
@@ -313,14 +456,14 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
                                 }
                             }
                             
-                            if (relevantWarnings.Count > 0)
+                            if (allWarnings.Count > 0)
                             {
                                 Console.ForegroundColor = ConsoleColor.Yellow;
-                                Console.WriteLine($"Found {relevantWarnings.Count} warning(s):");
+                                Console.WriteLine($"Found {allWarnings.Count} warning(s):");
                                 Console.WriteLine();
                                 Console.ResetColor();
                                 
-                                foreach (var warning in relevantWarnings)
+                                foreach (var warning in allWarnings)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Yellow;
                                     Console.Write("  ⚠ ");

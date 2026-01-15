@@ -41,7 +41,7 @@ public class StaticAnalysisService : IStaticAnalysisService
             ProjectType = projectType
         };
 
-        // Only analyze C# files for .NET projects
+        // Analyze various file types for projects
         if (projectType == ProjectType.GitRepository || projectType == ProjectType.DotNetSolution)
         {
             var gitignorePatterns = LoadGitignorePatterns(rootDirectory);
@@ -52,12 +52,37 @@ public class StaticAnalysisService : IStaticAnalysisService
                            !ShouldIgnoreFile(f, rootDirectory, gitignorePatterns))
                 .ToList();
 
-            result.TotalFilesAnalyzed = csFiles.Count;
+            var tsFiles = Directory.GetFiles(rootDirectory, "*.ts", SearchOption.AllDirectories)
+                .Where(f => !f.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar) &&
+                           !f.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar) &&
+                           !ShouldIgnoreFile(f, rootDirectory, gitignorePatterns))
+                .ToList();
 
-            foreach (var csFile in csFiles)
+            var jsFiles = Directory.GetFiles(rootDirectory, "*.js", SearchOption.AllDirectories)
+                .Where(f => !f.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar) &&
+                           !f.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar) &&
+                           !ShouldIgnoreFile(f, rootDirectory, gitignorePatterns))
+                .ToList();
+
+            var htmlFiles = Directory.GetFiles(rootDirectory, "*.html", SearchOption.AllDirectories)
+                .Where(f => !f.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar) &&
+                           !f.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar) &&
+                           !ShouldIgnoreFile(f, rootDirectory, gitignorePatterns))
+                .ToList();
+
+            var scssFiles = Directory.GetFiles(rootDirectory, "*.scss", SearchOption.AllDirectories)
+                .Where(f => !f.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar) &&
+                           !f.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar) &&
+                           !ShouldIgnoreFile(f, rootDirectory, gitignorePatterns))
+                .ToList();
+
+            var allFiles = csFiles.Concat(tsFiles).Concat(jsFiles).Concat(htmlFiles).Concat(scssFiles).ToList();
+            result.TotalFilesAnalyzed = allFiles.Count;
+
+            foreach (var file in allFiles)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await AnalyzeCSharpFileAsync(csFile, result, cancellationToken);
+                await AnalyzeFileAsync(file, result, cancellationToken);
             }
         }
 
@@ -113,12 +138,36 @@ public class StaticAnalysisService : IStaticAnalysisService
         return null;
     }
 
-    private async Task AnalyzeCSharpFileAsync(string filePath, AnalysisResult result, CancellationToken cancellationToken)
+    private async Task AnalyzeFileAsync(string filePath, AnalysisResult result, CancellationToken cancellationToken)
     {
         var content = await File.ReadAllTextAsync(filePath, cancellationToken);
         var lines = content.Split('\n');
         var relativePath = Path.GetRelativePath(result.RootDirectory, filePath);
+        var extension = Path.GetExtension(filePath).ToLowerInvariant();
 
+        // Analyze based on file type
+        switch (extension)
+        {
+            case ".cs":
+                AnalyzeCSharpFile(filePath, relativePath, content, lines, result);
+                break;
+            case ".ts":
+                AnalyzeTypeScriptFile(filePath, relativePath, content, lines, result);
+                break;
+            case ".js":
+                AnalyzeJavaScriptFile(filePath, relativePath, content, lines, result);
+                break;
+            case ".html":
+                AnalyzeHtmlFile(filePath, relativePath, content, lines, result);
+                break;
+            case ".scss":
+                AnalyzeScssFile(filePath, relativePath, content, lines, result);
+                break;
+        }
+    }
+
+    private void AnalyzeCSharpFile(string filePath, string relativePath, string content, string[] lines, AnalysisResult result)
+    {
         // Check for copyright header (implementation.spec.md AC5.1)
         AnalyzeCopyrightHeader(filePath, relativePath, lines, result);
 
@@ -130,6 +179,51 @@ public class StaticAnalysisService : IStaticAnalysisService
 
         // Check for implementation spec rules (implementation.spec.md)
         AnalyzeImplementationRules(filePath, relativePath, content, lines, result);
+    }
+
+    private void AnalyzeTypeScriptFile(string filePath, string relativePath, string content, string[] lines, AnalysisResult result)
+    {
+        // Check for copyright header (implementation.spec.md AC5.1)
+        AnalyzeCopyrightHeader(filePath, relativePath, lines, result);
+
+        // Basic TypeScript-specific checks can be added here
+    }
+
+    private void AnalyzeJavaScriptFile(string filePath, string relativePath, string content, string[] lines, AnalysisResult result)
+    {
+        // JavaScript-specific checks (no copyright header check)
+        // Additional rules can be added here as needed
+    }
+
+    private void AnalyzeHtmlFile(string filePath, string relativePath, string content, string[] lines, AnalysisResult result)
+    {
+        // Basic HTML validation
+        if (!content.Contains("<!DOCTYPE", StringComparison.OrdinalIgnoreCase) && 
+            !content.Contains("<html", StringComparison.OrdinalIgnoreCase))
+        {
+            result.Warnings.Add(new AnalysisWarning
+            {
+                RuleId = "HTML-001",
+                SpecSource = "best-practices",
+                Message = "HTML file should include DOCTYPE and html tag.",
+                FilePath = relativePath,
+                Recommendation = "Add <!DOCTYPE html> and proper HTML structure."
+            });
+        }
+    }
+
+    private void AnalyzeScssFile(string filePath, string relativePath, string content, string[] lines, AnalysisResult result)
+    {
+        // Check for BEM naming convention usage
+        if (content.Contains("&__") || content.Contains("&--"))
+        {
+            result.Info.Add(new AnalysisInfo
+            {
+                Category = "SCSS",
+                Message = "File uses BEM naming convention.",
+                FilePath = relativePath
+            });
+        }
     }
 
     private void AnalyzeCopyrightHeader(string filePath, string relativePath, string[] lines, AnalysisResult result)
