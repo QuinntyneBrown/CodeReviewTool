@@ -31,7 +31,7 @@ The service follows a clean architecture pattern with three layers:
 ## Storage
 
 Reports are stored in:
-- **Metadata**: CouchbaseLite database
+- **Metadata**: In-memory repository (ConcurrentDictionary)
 - **Content**: Local file system (configurable for cloud storage like S3/Azure Blob)
 
 ## API Endpoints
