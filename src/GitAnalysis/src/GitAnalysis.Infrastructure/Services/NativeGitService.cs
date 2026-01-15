@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using GitAnalysis.Core.Entities;
 using GitAnalysis.Core.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -16,8 +17,8 @@ public class NativeGitService : IGitService
 {
     private readonly ILogger<NativeGitService> logger;
     private readonly IGitIgnoreEngine gitIgnoreEngine;
-    private static readonly System.Text.RegularExpressions.Regex HunkHeaderRegex = 
-        new(@"@@ -\d+(?:,\d+)? \+(\d+)", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private static readonly Regex HunkHeaderRegex = 
+        new(@"@@ -\d+(?:,\d+)? \+(\d+)", RegexOptions.Compiled);
     private const string GitDiffPathPrefix = "a/";
 
     public NativeGitService(ILogger<NativeGitService> logger, IGitIgnoreEngine gitIgnoreEngine)
@@ -229,7 +230,7 @@ public class NativeGitService : IGitService
                 if (parts.Length >= 4)
                 {
                     // Remove git diff path prefix (parts[2] is like 'a/path/to/file')
-                    var filePath = parts[2].StartsWith(GitDiffPathPrefix) ? parts[2][GitDiffPathPrefix.Length..] : parts[2];
+                    var filePath = RemoveGitPathPrefix(parts[2]);
                     
                     if (fileStats.TryGetValue(filePath, out var stats))
                     {
@@ -299,6 +300,11 @@ public class NativeGitService : IGitService
         }
 
         return fileDiffs;
+    }
+
+    private static string RemoveGitPathPrefix(string path)
+    {
+        return path.StartsWith(GitDiffPathPrefix) ? path[GitDiffPathPrefix.Length..] : path;
     }
 
     private async Task<string> ExecuteGitCommandAsync(string workingDirectory, string arguments, CancellationToken cancellationToken)
