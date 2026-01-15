@@ -20,6 +20,7 @@ public class AnalysisRequestHandler : BackgroundService
     private readonly IMessageSubscriber messageSubscriber;
     private readonly IComparisonRequestRepository repository;
     private readonly ComparisonProcessorService processorService;
+    private CancellationToken _stoppingToken;
 
     public AnalysisRequestHandler(
         ILogger<AnalysisRequestHandler> logger,
@@ -35,6 +36,7 @@ public class AnalysisRequestHandler : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _stoppingToken = stoppingToken;
         logger.LogInformation("Analysis Request Handler starting");
 
         try
@@ -76,8 +78,8 @@ public class AnalysisRequestHandler : BackgroundService
                 UserId = message.RequestedBy
             };
 
-            request = await repository.CreateAsync(request, CancellationToken.None);
-            await processorService.EnqueueRequestAsync(request.RequestId, CancellationToken.None);
+            request = await repository.CreateAsync(request, _stoppingToken);
+            await processorService.EnqueueRequestAsync(request.RequestId, _stoppingToken);
 
             logger.LogInformation("Enqueued analysis request {RequestId}", request.RequestId);
         }
