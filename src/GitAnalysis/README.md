@@ -20,8 +20,7 @@ The GitAnalysis service can be configured to use either the native git command-l
 ```json
 {
   "GitService": {
-    "UseNativeGit": true,
-    "DefaultBaseBranch": "main"
+    "UseNativeGit": true
   }
 }
 ```
@@ -29,7 +28,6 @@ The GitAnalysis service can be configured to use either the native git command-l
 ### Configuration Options
 
 - **UseNativeGit** (default: `true`): When `true`, uses native git CLI without external libraries. When `false`, uses LibGit2Sharp.
-- **DefaultBaseBranch** (default: `"main"`): The default branch to compare against when not specified.
 
 ## Native Git CLI Implementation
 

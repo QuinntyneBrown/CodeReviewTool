@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Diagnostics;
-using System.Text;
 using GitAnalysis.Core.Entities;
 using GitAnalysis.Core.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -19,6 +18,7 @@ public class NativeGitService : IGitService
     private readonly IGitIgnoreEngine gitIgnoreEngine;
     private static readonly System.Text.RegularExpressions.Regex HunkHeaderRegex = 
         new(@"@@ -\d+(?:,\d+)? \+(\d+)", System.Text.RegularExpressions.RegexOptions.Compiled);
+    private const string GitDiffPathPrefix = "a/";
 
     public NativeGitService(ILogger<NativeGitService> logger, IGitIgnoreEngine gitIgnoreEngine)
     {
@@ -228,8 +228,8 @@ public class NativeGitService : IGitService
                 var parts = line.Split(' ');
                 if (parts.Length >= 4)
                 {
-                    // Remove 'a/' prefix (parts[2] is like 'a/path/to/file')
-                    var filePath = parts[2].StartsWith("a/") ? parts[2][2..] : parts[2];
+                    // Remove git diff path prefix (parts[2] is like 'a/path/to/file')
+                    var filePath = parts[2].StartsWith(GitDiffPathPrefix) ? parts[2][GitDiffPathPrefix.Length..] : parts[2];
                     
                     if (fileStats.TryGetValue(filePath, out var stats))
                     {
@@ -320,11 +320,11 @@ public class NativeGitService : IGitService
         var outputTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
         var errorTask = process.StandardError.ReadToEndAsync(cancellationToken);
 
-        // Await output tasks concurrently to prevent buffer deadlock
+        // Await all tasks concurrently to prevent buffer deadlock
         await Task.WhenAll(outputTask, errorTask, process.WaitForExitAsync(cancellationToken));
 
-        var output = outputTask.Result;
-        var error = errorTask.Result;
+        var output = await outputTask;
+        var error = await errorTask;
 
         if (process.ExitCode != 0)
         {

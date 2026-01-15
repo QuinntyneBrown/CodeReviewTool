@@ -13,10 +13,4 @@ public class GitServiceOptions
     /// Default is true (native git CLI).
     /// </summary>
     public bool UseNativeGit { get; set; } = true;
-
-    /// <summary>
-    /// The default branch to compare against when intoBranch is not specified.
-    /// Common values: "main", "master"
-    /// </summary>
-    public string DefaultBaseBranch { get; set; } = "main";
 }
