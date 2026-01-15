@@ -6,6 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>crt</AssemblyName>
+    
+    <!-- .NET Tool Configuration -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>crt</ToolCommandName>
+    <PackageId>CodeReviewTool.Cli</PackageId>
+    <Version>1.1.0</Version>
+    <Authors>Quinntyne Brown</Authors>
+    <Description>Code Review Tool - Compare Git branches and analyze code changes</Description>
+    <PackageTags>git;code-review;static-analysis;diff;cli</PackageTags>
+    <PackageProjectUrl>https://github.com/quinntynebrown/CodeReviewTool</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/quinntynebrown/CodeReviewTool</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
