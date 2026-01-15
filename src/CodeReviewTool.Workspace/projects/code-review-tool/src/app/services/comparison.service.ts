@@ -1,87 +1,26 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { DiffFile } from 'code-review-tool-components';
-
-export interface ComparisonRequest {
-  repositoryPath: string;
-  fromBranch: string;
-  intoBranch: string;
-}
-
-export interface ComparisonResult {
-  requestId: string;
-  status: string;
-  fromBranch: string;
-  intoBranch: string;
-  fileDiffs: FileDiff[];
-  totalAdditions: number;
-  totalDeletions: number;
-  totalModifications: number;
-  completedAt?: Date;
-  errorMessage?: string;
-}
-
-interface FileDiff {
-  filePath: string;
-  changeType: string;
-  additions: number;
-  deletions: number;
-  lineChanges: LineDiff[];
-}
-
-interface LineDiff {
-  lineNumber: number;
-  content: string;
-  type: string;
-}
+import { Observable } from 'rxjs';
+import { HttpService } from './http.service';
+import { ComparisonRequest } from 'code-review-tool-components';
+import { ComparisonResponse } from '../models/diff-result';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ComparisonService {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:5000';
+  private readonly httpService = inject(HttpService);
 
-  requestComparison(request: ComparisonRequest): Observable<ComparisonResult> {
-    return this.http.post<ComparisonResult>(
-      `${this.baseUrl}/api/comparison`,
-      request
+  requestComparison(request: ComparisonRequest): Observable<ComparisonResponse> {
+    return this.httpService.post<ComparisonResponse, ComparisonRequest>('/comparison', request);
+  }
+
+  getComparison(requestId: string): Observable<ComparisonResponse> {
+    return this.httpService.get<ComparisonResponse>(`/comparison/${requestId}`);
+  }
+
+  getBranches(repositoryPath: string): Observable<string[]> {
+    return this.httpService.get<string[]>(
+      `/comparison/branches?repositoryPath=${encodeURIComponent(repositoryPath)}`
     );
-  }
-
-  getComparisonResult(requestId: string): Observable<ComparisonResult> {
-    return this.http.get<ComparisonResult>(
-      `${this.baseUrl}/api/comparison/${requestId}`
-    );
-  }
-
-  mapToDiffFiles(result: ComparisonResult): DiffFile[] {
-    return result.fileDiffs.map(file => ({
-      fileName: file.filePath,
-      additions: file.additions,
-      deletions: file.deletions,
-      changes: file.lineChanges.map(line => ({
-        lineNumber: line.lineNumber,
-        content: line.content,
-        type: this.mapLineType(line.type)
-      }))
-    }));
-  }
-
-  private mapLineType(type: string): 'added' | 'removed' | 'context' | 'hunk-header' {
-    switch (type.toLowerCase()) {
-      case 'added':
-      case 'addition':
-        return 'added';
-      case 'removed':
-      case 'deletion':
-        return 'removed';
-      case 'hunk-header':
-      case 'header':
-        return 'hunk-header';
-      default:
-        return 'context';
-    }
   }
 }

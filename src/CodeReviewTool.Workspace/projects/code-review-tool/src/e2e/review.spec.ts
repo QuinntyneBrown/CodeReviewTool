@@ -73,8 +73,8 @@ test.describe('Review Page', () => {
     await page.waitForSelector('crt-diff-viewer');
 
     // Check for diff stats (additions/deletions)
-    await expect(page.locator('text=5')).toBeVisible(); // additions
-    await expect(page.locator('text=2')).toBeVisible(); // deletions
+    await expect(page.locator('.diff-viewer__stat--added span')).toHaveText('5');
+    await expect(page.locator('.diff-viewer__stat--removed span')).toHaveText('2');
   });
 
   test('should navigate back to home when back button is clicked', async ({ page }) => {
@@ -88,7 +88,7 @@ test.describe('Review Page', () => {
 
     // Verify navigation to home page
     await page.waitForURL('/');
-    expect(page.url()).toContain('localhost:4200');
+    expect(page.url()).toContain(':4200');
     expect(page.url()).not.toContain('/review');
   });
 

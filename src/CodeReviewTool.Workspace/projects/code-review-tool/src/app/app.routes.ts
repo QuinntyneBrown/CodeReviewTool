@@ -1,18 +1,21 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-import { Review } from './pages/review/review';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home
+    loadComponent: () => import('./pages/comparison/comparison').then((m) => m.Comparison),
+  },
+  {
+    path: 'comparison',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
+  {
+    path: 'review',
+    loadComponent: () => import('./pages/review/review').then((m) => m.Review),
   },
   {
     path: 'review/:id',
-    component: Review
+    loadComponent: () => import('./pages/review/review').then((m) => m.Review),
   },
-  {
-    path: '**',
-    redirectTo: ''
-  }
 ];

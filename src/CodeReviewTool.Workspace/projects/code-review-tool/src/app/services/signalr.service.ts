@@ -48,7 +48,7 @@ export class SignalRService implements OnDestroy {
       catchError((error) => {
         console.error('SignalR connection error:', error);
         this.connectionStateSubject.next('disconnected');
-        throw error;
+        return of(undefined);
       })
     );
   }
