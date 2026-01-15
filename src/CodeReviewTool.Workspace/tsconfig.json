@@ -3,9 +3,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "code-review-tool-components": [
-        "./dist/code-review-tool-components"
+        "./projects/code-review-tool-components/src/public-api.ts"
       ]
     },
     "strict": true,

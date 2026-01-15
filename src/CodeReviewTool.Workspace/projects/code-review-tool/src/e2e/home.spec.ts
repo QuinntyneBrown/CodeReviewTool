@@ -5,7 +5,7 @@ test.describe('Home Page', () => {
     await page.goto('/');
 
     // Check that the page title is correct
-    await expect(page.locator('h1')).toContainText('Code Review Tool');
+    await expect(page.getByRole('heading', { name: 'Code Review Tool' })).toBeVisible();
 
     // Check that the comparison input component is visible
     await expect(page.locator('crt-comparison-input')).toBeVisible();

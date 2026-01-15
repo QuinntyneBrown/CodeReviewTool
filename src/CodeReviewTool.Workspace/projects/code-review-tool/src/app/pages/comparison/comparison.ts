@@ -12,6 +12,7 @@ import { ComparisonState } from '../../models/diff-result';
 
 @Component({
   selector: 'app-comparison',
+  standalone: true,
   imports: [CommonModule, ComparisonInput, MatProgressSpinnerModule, MatSnackBarModule],
   templateUrl: './comparison.html',
   styleUrl: './comparison.scss',
@@ -48,6 +49,18 @@ export class Comparison implements OnInit, OnDestroy {
             error: null,
           });
 
+          if (response.status === 'Completed') {
+            this.router.navigate(['/review', response.requestId]);
+            return;
+          }
+
+          if (response.status === 'Failed') {
+            const message = response.errorMessage || 'Comparison failed';
+            this.stateSubject.next({ requestId: null, loading: false, error: message });
+            this.snackBar.open(message, 'Close', { duration: 5000 });
+            return;
+          }
+
           this.signalRService.subscribeToComparison(response.requestId).subscribe();
 
           this.signalRService
@@ -55,9 +68,7 @@ export class Comparison implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe((result) => {
               if (result.status === 'Completed') {
-                this.router.navigate(['/review'], {
-                  queryParams: { requestId: result.requestId },
-                });
+                this.router.navigate(['/review', result.requestId]);
               } else if (result.status === 'Failed') {
                 this.stateSubject.next({
                   requestId: null,

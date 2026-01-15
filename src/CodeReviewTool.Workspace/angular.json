@@ -83,6 +83,9 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/code-review-tool/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "projects/code-review-tool/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [

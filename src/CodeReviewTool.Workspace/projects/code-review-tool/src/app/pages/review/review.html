@@ -1,44 +1,40 @@
 <div class="review">
-  <div class="review__header">
-    <button mat-icon-button class="review__back-button" (click)="onBackHome()">
+  <header class="review__header">
+    <button mat-icon-button (click)="onBackToComparison()" class="review__back-btn">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h1 class="review__title">Code Review</h1>
-  </div>
+    @if ((fromBranch$ | async) && (intoBranch$ | async)) {
+      <span class="review__branch-info">
+        {{ fromBranch$ | async }} → {{ intoBranch$ | async }}
+      </span>
+    }
+  </header>
 
-  <div class="review__content">
-    @if (isLoading$ | async) {
+  <main class="review__main">
+    @if (loading$ | async) {
       <div class="review__loading">
-        <mat-spinner></mat-spinner>
-        <p>Loading comparison results...</p>
+        <mat-spinner diameter="48"></mat-spinner>
+        <p class="review__loading-text">Loading diff results...</p>
       </div>
-    } @else if (error$ | async; as error) {
+    }
+
+    @if (error$ | async) {
       <div class="review__error">
-        <mat-icon>error</mat-icon>
-        <p>{{ error }}</p>
-        <button mat-raised-button color="primary" (click)="onBackHome()">
-          Back to Home
+        <mat-icon>error_outline</mat-icon>
+        <p>{{ error$ | async }}</p>
+        <button mat-raised-button color="primary" (click)="onBackToComparison()">
+          Back to Comparison
         </button>
       </div>
-    } @else {
-      <ng-container *ngIf="comparisonResult$ | async as result">
-        <crt-diff-viewer
-          [files]="(diffFiles$ | async) || []"
-          [fromBranch]="result.fromBranch"
-          [intoBranch]="result.intoBranch">
-        </crt-diff-viewer>
-
-        @for (comment of sampleComments; track comment.commentId) {
-          <div class="review__comment-section">
-            <crt-code-comment
-              [comment]="comment"
-              [isReplyFormVisible]="false"
-              (reply)="onReply($event)"
-              (resolve)="onResolve($event)">
-            </crt-code-comment>
-          </div>
-        }
-      </ng-container>
     }
-  </div>
+
+    @if (!(loading$ | async) && !(error$ | async)) {
+      <crt-diff-viewer
+        [files]="(files$ | async) || []"
+        [fromBranch]="(fromBranch$ | async) || ''"
+        [intoBranch]="(intoBranch$ | async) || ''">
+      </crt-diff-viewer>
+    }
+  </main>
 </div>
