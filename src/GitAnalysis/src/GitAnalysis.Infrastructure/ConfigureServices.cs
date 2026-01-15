@@ -10,6 +10,7 @@ using GitAnalysis.Core.Interfaces;
 using GitAnalysis.Infrastructure.Services;
 using GitAnalysis.Infrastructure.Repositories;
 using GitAnalysis.Infrastructure.BackgroundServices;
+using GitAnalysis.Infrastructure.Configuration;
 
 namespace GitAnalysis.Infrastructure;
 
@@ -17,7 +18,21 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IGitService, GitService>();
+        // Configure GitService options
+        services.Configure<GitServiceOptions>(configuration.GetSection("GitService"));
+        
+        // Register the appropriate Git service implementation
+        var gitServiceOptions = configuration.GetSection("GitService").Get<GitServiceOptions>() ?? new GitServiceOptions();
+        
+        if (gitServiceOptions.UseNativeGit)
+        {
+            services.AddSingleton<IGitService, NativeGitService>();
+        }
+        else
+        {
+            services.AddSingleton<IGitService, GitService>();
+        }
+        
         services.AddSingleton<IGitIgnoreEngine, GitIgnoreEngine>();
         services.AddSingleton<IComparisonRequestRepository, ComparisonRequestRepository>();
         services.AddSingleton<IDiffResultRepository, DiffResultRepository>();
