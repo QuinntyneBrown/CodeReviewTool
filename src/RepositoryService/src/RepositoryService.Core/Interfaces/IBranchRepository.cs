@@ -1,0 +1,15 @@
+// Copyright (c) Quinntyne Brown. All Rights Reserved.
+// Licensed under the MIT License. See License.txt in the project root for license information.
+
+using RepositoryService.Core.Entities;
+
+namespace RepositoryService.Core.Interfaces;
+
+public interface IBranchRepository
+{
+    Task<Branch?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Branch>> GetByRepositoryIdAsync(string repositoryId, CancellationToken cancellationToken = default);
+    Task<Branch> CreateAsync(Branch branch, CancellationToken cancellationToken = default);
+    Task<Branch> UpdateAsync(Branch branch, CancellationToken cancellationToken = default);
+    Task DeleteAsync(string id, CancellationToken cancellationToken = default);
+}

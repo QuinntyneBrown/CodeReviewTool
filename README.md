@@ -24,12 +24,19 @@ The application follows a microservices architecture with an API Gateway pattern
    - WebSocket support for live updates
    - Hub endpoint: `/notifications`
 
-4. **Frontend** (`src/CodeReviewTool.Workspace`)
+4. **Repository Service** (`src/RepositoryService`)
+   - Manages Git repository connections and operations
+   - Tracks repository metadata, branches, and commits
+   - Publishes events for repository changes
+   - Endpoints: `/api/repositories/*`
+   - Runs on `http://localhost:5003` (development)
+
+5. **Frontend** (`src/CodeReviewTool.Workspace`)
    - Angular-based user interface
    - Communicates exclusively through the API Gateway
    - Runs on `http://localhost:4200` (development)
 
-5. **CLI Tool** (`src/CodeReviewTool.Cli`)
+6. **CLI Tool** (`src/CodeReviewTool.Cli`)
    - Command-line interface for branch comparison
    - Standalone tool that can be used without the web interface
    - Generates formatted console output
@@ -103,7 +110,11 @@ dotnet run
 cd src/RealtimeNotification/src/RealtimeNotification.Api
 dotnet run
 
-# Terminal 3: API Gateway (Port 5000)
+# Terminal 3: Repository Service (Port 5003)
+cd src/RepositoryService/src/RepositoryService.Api
+dotnet run
+
+# Terminal 4: API Gateway (Port 5000)
 cd src/ApiGateway
 dotnet run
 ```
@@ -111,7 +122,7 @@ dotnet run
 #### 2. Start the Frontend
 
 ```bash
-# Terminal 4: Angular Frontend
+# Terminal 5: Angular Frontend
 cd src/CodeReviewTool.Workspace
 npm install
 npm start
@@ -127,6 +138,7 @@ The API Gateway is configured via `appsettings.json` and uses YARP for reverse p
 
 - **Git Analysis**: `/api/comparison/*` → `http://localhost:5001`
 - **Notifications**: `/notifications/*` → `http://localhost:5002`
+- **Repository Service**: `/api/repositories/*` → `http://localhost:5003`
 
 ### CORS
 
@@ -152,6 +164,12 @@ Configured to allow requests from `http://localhost:4200` (frontend) with:
         "Match": {
           "Path": "/notifications/{**catch-all}"
         }
+      },
+      "repository-service-route": {
+        "ClusterId": "repository-service-cluster",
+        "Match": {
+          "Path": "/api/repositories/{**catch-all}"
+        }
       }
     },
     "Clusters": {
@@ -166,6 +184,13 @@ Configured to allow requests from `http://localhost:4200` (frontend) with:
         "Destinations": {
           "destination1": {
             "Address": "http://localhost:5002"
+          }
+        }
+      },
+      "repository-service-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:5003"
           }
         }
       }
@@ -194,6 +219,9 @@ dotnet test src/GitAnalysis/GitAnalysis.sln
 # Realtime Notification Tests
 dotnet test src/RealtimeNotification/RealtimeNotification.sln
 
+# Repository Service Tests
+dotnet test src/RepositoryService/RepositoryService.sln
+
 # CLI Tests
 dotnet test tests/CodeReviewTool.Cli.Tests/CodeReviewTool.Cli.Tests.csproj
 ```
@@ -217,8 +245,10 @@ The API Gateway test suite achieves >80% code coverage with comprehensive tests 
 CodeReviewTool/
 ├── src/
 │   ├── ApiGateway/                    # API Gateway service
+│   ├── CodeReviewTool.Shared/         # Shared messaging infrastructure
 │   ├── GitAnalysis/                   # Git analysis microservice
 │   ├── RealtimeNotification/          # Notification microservice
+│   ├── RepositoryService/             # Repository management microservice
 │   ├── CodeReviewTool.Workspace/      # Angular frontend
 │   └── CodeReviewTool.Cli/            # CLI tool
 ├── tests/
@@ -229,6 +259,25 @@ CodeReviewTool/
 │   └── CodeReviewTool.Cli.Tests/      # CLI tests
 └── CodeReviewTool.sln                 # Main solution file
 ```
+
+## Shared Infrastructure
+
+The `CodeReviewTool.Shared` project provides common infrastructure for inter-service communication:
+
+### Messaging
+
+- **UDP-based messaging** for low-latency service-to-service communication
+- **MessagePack serialization** for efficient binary message encoding
+- **Pub/Sub pattern** for loose coupling between services
+
+### Message Flow
+
+1. Services publish messages to a UDP multicast address
+2. Interested services subscribe to specific message types
+3. Messages are automatically serialized/deserialized
+4. No central broker required for message delivery
+
+See the [Repository Service README](src/RepositoryService/README.md) for examples of message publishing.
 
 ## Development
 
