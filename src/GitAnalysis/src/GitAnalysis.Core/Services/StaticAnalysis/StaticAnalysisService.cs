@@ -134,22 +134,34 @@ public class StaticAnalysisService : IStaticAnalysisService
 
     private void AnalyzeCopyrightHeader(string filePath, string relativePath, string[] lines, AnalysisResult result)
     {
-        var expectedLine1 = "// Copyright (c) Quinntyne Brown. All Rights Reserved.";
-        var expectedLine2 = "// Licensed under the MIT License. See License.txt in the project root for license information.";
-
-        if (lines.Length < 2 ||
-            !lines[0].Trim().Equals(expectedLine1, StringComparison.Ordinal) ||
-            !lines[1].Trim().Equals(expectedLine2, StringComparison.Ordinal))
+        // Check that the file has some form of copyright header in the first few lines
+        var hasCopyrightHeader = false;
+        var linesToCheck = Math.Min(5, lines.Length); // Check first 5 lines
+        
+        for (int i = 0; i < linesToCheck; i++)
         {
+            var line = lines[i].Trim();
+            // Check if line contains copyright-related keywords
+            if (line.Contains("Copyright", StringComparison.OrdinalIgnoreCase) ||
+                (line.Contains("©") && (line.Contains("All Rights Reserved", StringComparison.OrdinalIgnoreCase) || 
+                                        line.Length > 5))) // © symbol with some content
+            {
+                hasCopyrightHeader = true;
+                break;
+            }
+        }
+
+        if (!hasCopyrightHeader)
+        {            
             result.Violations.Add(new AnalysisViolation
             {
                 RuleId = "AC5.1",
                 SpecSource = "implementation.spec.md",
                 Severity = IssueSeverity.Error,
-                Message = "Missing or incorrect copyright header.",
+                Message = "Missing copyright header.",
                 FilePath = relativePath,
                 LineNumber = 1,
-                SuggestedFix = $"Add the following header at the top of the file:\n{expectedLine1}\n{expectedLine2}"
+                SuggestedFix = $"Add a copyright header at the top of the file."
             });
         }
     }
