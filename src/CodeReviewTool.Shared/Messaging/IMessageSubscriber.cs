@@ -8,5 +8,5 @@ public interface IMessageSubscriber
     Task SubscribeAsync<TMessage>(Func<TMessage, Task> handler, CancellationToken cancellationToken = default)
         where TMessage : class;
 
-    Task UnsubscribeAsync(string messageType);
+    Task UnsubscribeAsync<TMessage>() where TMessage : class;
 }
