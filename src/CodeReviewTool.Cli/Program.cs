@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.CommandLine;
+using System.Text;
 using LibGit2Sharp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ using GitAnalysis.Core.Services.StaticAnalysis.CSharp;
 using GitAnalysis.Core.Services.StaticAnalysis.Angular;
 using GitAnalysis.Core.Services.StaticAnalysis.Scss;
 using GitAnalysis.Core.Entities;
+using TextCopy;
 
 var fromOption = new Option<string?>(
     aliases: new[] { "--from", "-f" },
@@ -87,7 +89,7 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
 
         // Setup DI
         var services = new ServiceCollection();
-        var logLevel = verbose ? Microsoft.Extensions.Logging.LogLevel.Information : Microsoft.Extensions.Logging.LogLevel.Warning;
+        var logLevel = verbose ? Microsoft.Extensions.Logging.LogLevel.Information : Microsoft.Extensions.Logging.LogLevel.Error;
         services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(logLevel));
         services.AddSingleton<IGitIgnoreEngine, GitIgnoreEngine>();
         services.AddSingleton<IGitService, GitService>();
@@ -154,7 +156,8 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
         Console.ResetColor();
         Console.WriteLine($"Total modified:    {result.TotalModifications}");
         Console.WriteLine();
-
+        // StringBuilder to collect all diff content for clipboard
+        var clipboardContent = new StringBuilder();
         if (result.FileDiffs.Count > 0)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -182,6 +185,37 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
                 Console.Write($"-{file.Deletions,4}");
                 Console.ResetColor();
                 Console.WriteLine();
+            }
+            
+            // Build clipboard content with all line-by-line diffs
+            clipboardContent.AppendLine("═══════════════════════════════════════════════════════════════");
+            clipboardContent.AppendLine("  Line-by-Line Diffs");
+            clipboardContent.AppendLine("═══════════════════════════════════════════════════════════════");
+            clipboardContent.AppendLine();
+            
+            foreach (var file in result.FileDiffs)
+            {
+                if (file.LineChanges.Count == 0)
+                    continue;
+                    
+                clipboardContent.AppendLine($"──── {file.FilePath} ────");
+                
+                foreach (var line in file.LineChanges)
+                {
+                    switch (line.Type)
+                    {
+                        case DiffType.Addition:
+                            clipboardContent.AppendLine($"  +{line.LineNumber,4} | {line.Content}");
+                            break;
+                        case DiffType.Deletion:
+                            clipboardContent.AppendLine($"  -{line.LineNumber,4} | {line.Content}");
+                            break;
+                        case DiffType.Context:
+                            clipboardContent.AppendLine($"   {line.LineNumber,4} | {line.Content}");
+                            break;
+                    }
+                }
+                clipboardContent.AppendLine();
             }
             
             // Show line-by-line diffs if requested
@@ -499,6 +533,25 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("No differences found between the branches.");
             Console.ResetColor();
+        }
+
+        // Copy diff content to clipboard
+        if (clipboardContent.Length > 0)
+        {
+            try
+            {
+                await ClipboardService.SetTextAsync(clipboardContent.ToString());
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("✓ Line-by-line diff copied to clipboard");
+                Console.ResetColor();
+            }
+            catch (Exception clipEx)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"⚠ Failed to copy to clipboard: {clipEx.Message}");
+                Console.ResetColor();
+            }
         }
 
         Console.WriteLine();
