@@ -33,6 +33,12 @@
     },
     {
       "path": "./projects/code-review-tool-components/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/code-review-tool/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/code-review-tool/tsconfig.spec.json"
     }
   ]
 }
