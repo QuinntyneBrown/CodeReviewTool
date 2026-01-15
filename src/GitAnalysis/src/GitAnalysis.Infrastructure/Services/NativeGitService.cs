@@ -17,6 +17,8 @@ public class NativeGitService : IGitService
 {
     private readonly ILogger<NativeGitService> logger;
     private readonly IGitIgnoreEngine gitIgnoreEngine;
+    private static readonly System.Text.RegularExpressions.Regex HunkHeaderRegex = 
+        new(@"@@ -\d+(?:,\d+)? \+(\d+)", System.Text.RegularExpressions.RegexOptions.Compiled);
 
     public NativeGitService(ILogger<NativeGitService> logger, IGitIgnoreEngine gitIgnoreEngine)
     {
@@ -172,8 +174,12 @@ public class NativeGitService : IGitService
             if (parts.Length < 3)
                 continue;
 
-            var additions = parts[0] == "-" ? 0 : int.Parse(parts[0]);
-            var deletions = parts[1] == "-" ? 0 : int.Parse(parts[1]);
+            // Handle binary files and non-numeric values safely
+            if (!int.TryParse(parts[0], out var additions))
+                additions = 0;
+            if (!int.TryParse(parts[1], out var deletions))
+                deletions = 0;
+            
             var filePath = parts[2];
 
             // Determine change type based on additions and deletions
@@ -223,7 +229,7 @@ public class NativeGitService : IGitService
                 if (parts.Length >= 4)
                 {
                     // Remove 'a/' prefix (parts[2] is like 'a/path/to/file')
-                    var filePath = parts[2].StartsWith("a/") ? parts[2].Substring(2) : parts[2];
+                    var filePath = parts[2].StartsWith("a/") ? parts[2][2..] : parts[2];
                     
                     if (fileStats.TryGetValue(filePath, out var stats))
                     {
@@ -252,7 +258,7 @@ public class NativeGitService : IGitService
             else if (line.StartsWith("@@"))
             {
                 // Format: @@ -old_start,old_count +new_start,new_count @@
-                var match = System.Text.RegularExpressions.Regex.Match(line, @"@@ -\d+(?:,\d+)? \+(\d+)");
+                var match = HunkHeaderRegex.Match(line);
                 if (match.Success)
                 {
                     currentLineNumber = int.Parse(match.Groups[1].Value);
@@ -314,10 +320,11 @@ public class NativeGitService : IGitService
         var outputTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
         var errorTask = process.StandardError.ReadToEndAsync(cancellationToken);
 
-        await process.WaitForExitAsync(cancellationToken);
+        // Await output tasks concurrently to prevent buffer deadlock
+        await Task.WhenAll(outputTask, errorTask, process.WaitForExitAsync(cancellationToken));
 
-        var output = await outputTask;
-        var error = await errorTask;
+        var output = outputTask.Result;
+        var error = errorTask.Result;
 
         if (process.ExitCode != 0)
         {
