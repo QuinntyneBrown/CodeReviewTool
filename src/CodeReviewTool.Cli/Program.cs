@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GitAnalysis.Core.Interfaces;
 using GitAnalysis.Infrastructure.Services;
+using GitAnalysis.Core.Services.StaticAnalysis;
+using GitAnalysis.Core.Entities;
 
 var fromOption = new Option<string?>(
     aliases: new[] { "--from", "-f" },
@@ -30,15 +32,29 @@ var verboseOption = new Option<bool>(
     getDefaultValue: () => false)
 { IsRequired = false };
 
+var showDiffOption = new Option<bool>(
+    aliases: new[] { "--show-diff", "-d" },
+    description: "Show line-by-line diff for changed files",
+    getDefaultValue: () => false)
+{ IsRequired = false };
+
+var analyzeOption = new Option<bool>(
+    aliases: new[] { "--analyze", "-a" },
+    description: "Run static analysis on changed files",
+    getDefaultValue: () => true)
+{ IsRequired = false };
+
 var rootCommand = new RootCommand("Code Review Tool - Compare Git branches")
 {
     fromOption,
     intoOption,
     repositoryOption,
-    verboseOption
+    verboseOption,
+    showDiffOption,
+    analyzeOption
 };
 
-rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? repoPath, bool verbose) =>
+rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? repoPath, bool verbose, bool showDiff, bool analyze) =>
 {
     try
     {
@@ -72,9 +88,11 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
         services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(logLevel));
         services.AddSingleton<IGitIgnoreEngine, GitIgnoreEngine>();
         services.AddSingleton<IGitService, GitService>();
+        services.AddSingleton<IStaticAnalysisService, StaticAnalysisService>();
         
         var serviceProvider = services.BuildServiceProvider();
         var gitService = serviceProvider.GetRequiredService<IGitService>();
+        var analysisService = serviceProvider.GetRequiredService<IStaticAnalysisService>();
 
         // Display comparison info
         Console.WriteLine();
@@ -156,6 +174,182 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
                 Console.ResetColor();
                 Console.WriteLine();
             }
+            
+            // Show line-by-line diffs if requested
+            if (showDiff)
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("═══════════════════════════════════════════════════════════════");
+                Console.WriteLine("  Line-by-Line Diffs");
+                Console.WriteLine("═══════════════════════════════════════════════════════════════");
+                Console.ResetColor();
+                Console.WriteLine();
+                
+                foreach (var file in result.FileDiffs)
+                {
+                    if (file.LineChanges.Count == 0)
+                        continue;
+                        
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"──── {file.FilePath} ────");
+                    Console.ResetColor();
+                    
+                    foreach (var line in file.LineChanges)
+                    {
+                        switch (line.Type)
+                        {
+                            case DiffType.Addition:
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine($"  +{line.LineNumber,4} | {line.Content}");
+                                break;
+                            case DiffType.Deletion:
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine($"  -{line.LineNumber,4} | {line.Content}");
+                                break;
+                            case DiffType.Context:
+                                Console.ForegroundColor = ConsoleColor.Gray;
+                                Console.WriteLine($"   {line.LineNumber,4} | {line.Content}");
+                                break;
+                        }
+                        Console.ResetColor();
+                    }
+                    Console.WriteLine();
+                }
+            }
+            
+            // Run static analysis on changed files if requested
+            if (analyze)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("═══════════════════════════════════════════════════════════════");
+                Console.WriteLine("  Static Analysis Results");
+                Console.WriteLine("═══════════════════════════════════════════════════════════════");
+                Console.ResetColor();
+                Console.WriteLine();
+                Console.WriteLine("Analyzing changed files...");
+                Console.WriteLine();
+                
+                var analysisResults = new Dictionary<string, GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisResult>();
+                var changedFilesToAnalyze = result.FileDiffs
+                    .Where(f => f.ChangeType != FileChangeType.Deleted)
+                    .Select(f => Path.Combine(repositoryPath, f.FilePath))
+                    .Where(f => File.Exists(f) && (f.EndsWith(".cs") || f.EndsWith(".ts") || f.EndsWith(".js")))
+                    .ToList();
+                
+                if (changedFilesToAnalyze.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("No analyzable files found (only .cs, .ts, and .js files are supported).");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine($"Analyzing {changedFilesToAnalyze.Count} file(s)...");
+                    Console.WriteLine();
+                    
+                    // For each changed file, run analysis on the entire project/repository
+                    // The analysis service will analyze the whole context and we'll filter for changed files
+                    GitAnalysis.Core.Services.StaticAnalysis.Models.AnalysisResult? projectAnalysis = null;
+                    
+                    try
+                    {
+                        // Analyze from the first changed file (the service will find the project root)
+                        projectAnalysis = await analysisService.AnalyzeAsync(changedFilesToAnalyze.First());
+                        
+                        // Filter violations for only changed files
+                        var changedFileNames = new HashSet<string>(
+                            changedFilesToAnalyze.Select(f => Path.GetFileName(f)),
+                            StringComparer.OrdinalIgnoreCase
+                        );
+                        
+                        var relevantViolations = projectAnalysis.Violations
+                            .Where(v => v.FilePath != null && changedFileNames.Contains(Path.GetFileName(v.FilePath)))
+                            .ToList();
+                        
+                        var relevantWarnings = projectAnalysis.Warnings
+                            .Where(w => w.FilePath != null && changedFileNames.Contains(Path.GetFileName(w.FilePath)))
+                            .ToList();
+                        
+                        // Display results
+                        if (relevantViolations.Count == 0 && relevantWarnings.Count == 0)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("✓ No issues found in changed files!");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            if (relevantViolations.Count > 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine($"Found {relevantViolations.Count} violation(s):");
+                                Console.WriteLine();
+                                Console.ResetColor();
+                                
+                                foreach (var violation in relevantViolations)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write("  ✗ ");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"[{violation.RuleId}] {violation.Message}");
+                                    
+                                    if (violation.FilePath != null)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Gray;
+                                        var location = violation.LineNumber.HasValue 
+                                            ? $"{Path.GetFileName(violation.FilePath)}:{violation.LineNumber}"
+                                            : Path.GetFileName(violation.FilePath);
+                                        Console.WriteLine($"    Location: {location}");
+                                        Console.WriteLine($"    Source: {violation.SpecSource}");
+                                        
+                                        if (!string.IsNullOrEmpty(violation.SuggestedFix))
+                                        {
+                                            Console.WriteLine($"    Fix: {violation.SuggestedFix}");
+                                        }
+                                        Console.ResetColor();
+                                    }
+                                    Console.WriteLine();
+                                }
+                            }
+                            
+                            if (relevantWarnings.Count > 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.WriteLine($"Found {relevantWarnings.Count} warning(s):");
+                                Console.WriteLine();
+                                Console.ResetColor();
+                                
+                                foreach (var warning in relevantWarnings)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("  ⚠ ");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"[{warning.RuleId}] {warning.Message}");
+                                    
+                                    if (warning.FilePath != null)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Gray;
+                                        var location = warning.LineNumber.HasValue 
+                                            ? $"{Path.GetFileName(warning.FilePath)}:{warning.LineNumber}"
+                                            : Path.GetFileName(warning.FilePath);
+                                        Console.WriteLine($"    Location: {location}");
+                                        Console.WriteLine($"    Source: {warning.SpecSource}");
+                                        Console.ResetColor();
+                                    }
+                                    Console.WriteLine();
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"⚠ Static analysis failed: {ex.Message}");
+                        Console.ResetColor();
+                    }
+                }
+            }
         }
         else
         {
@@ -173,7 +367,7 @@ rootCommand.SetHandler(async (string? fromBranch, string intoBranch, string? rep
         Console.ResetColor();
         Environment.Exit(1);
     }
-}, fromOption, intoOption, repositoryOption, verboseOption);
+}, fromOption, intoOption, repositoryOption, verboseOption, showDiffOption, analyzeOption);
 
 return await rootCommand.InvokeAsync(args);
 
