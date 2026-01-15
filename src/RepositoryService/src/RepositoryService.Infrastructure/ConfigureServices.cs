@@ -1,7 +1,6 @@
 // Copyright (c) Quinntyne Brown. All Rights Reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
-using Couchbase.Lite;
 using CodeReviewTool.Shared.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,17 +17,6 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var dbPath = configuration.GetValue<string>("Database:Path") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RepositoryService");
-        Directory.CreateDirectory(dbPath);
-
-        var databaseConfig = new DatabaseConfiguration
-        {
-            Directory = dbPath
-        };
-
-        var database = new Database("repositoryservice", databaseConfig);
-        services.AddSingleton(database);
-
         services.AddSingleton<IRepositoryRepository, RepositoryRepository>();
         services.AddSingleton<IBranchRepository, BranchRepository>();
         services.AddSingleton<IGitService, GitService>();
