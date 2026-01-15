@@ -46,10 +46,42 @@ public class GitService : IGitService
             return;
         }
 
+        if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(localPath))
+        {
+            throw new ArgumentException("URL and local path must not be empty");
+        }
+
         var parentDir = Path.GetDirectoryName(localPath) ?? throw new InvalidOperationException("Invalid local path");
         Directory.CreateDirectory(parentDir);
 
-        await ExecuteGitCommandAsync(parentDir, $"clone {url} {Path.GetFileName(localPath)}", cancellationToken);
+        var processStartInfo = new ProcessStartInfo
+        {
+            FileName = "git",
+            WorkingDirectory = parentDir,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        processStartInfo.ArgumentList.Add("clone");
+        processStartInfo.ArgumentList.Add(url);
+        processStartInfo.ArgumentList.Add(Path.GetFileName(localPath));
+
+        using var process = new Process { StartInfo = processStartInfo };
+        process.Start();
+
+        var output = await process.StandardOutput.ReadToEndAsync(cancellationToken);
+        var error = await process.StandardError.ReadToEndAsync(cancellationToken);
+
+        await process.WaitForExitAsync(cancellationToken);
+
+        if (process.ExitCode != 0)
+        {
+            _logger.LogError("Git clone failed: {Error}", error);
+            throw new InvalidOperationException($"Git clone failed: {error}");
+        }
+
         _logger.LogInformation("Cloned repository from {Url} to {LocalPath}", url, localPath);
     }
 
@@ -75,10 +107,13 @@ public class GitService : IGitService
         using var process = new Process { StartInfo = processStartInfo };
         process.Start();
 
-        var output = await process.StandardOutput.ReadToEndAsync();
-        var error = await process.StandardError.ReadToEndAsync();
+        var outputTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
+        var errorTask = process.StandardError.ReadToEndAsync(cancellationToken);
 
         await process.WaitForExitAsync(cancellationToken);
+
+        var output = await outputTask;
+        var error = await errorTask;
 
         if (process.ExitCode != 0)
         {

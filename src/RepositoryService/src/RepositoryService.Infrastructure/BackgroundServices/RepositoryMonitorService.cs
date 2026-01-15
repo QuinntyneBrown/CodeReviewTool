@@ -92,7 +92,20 @@ public class RepositoryMonitorService : BackgroundService
                         else if (existingBranch.LatestCommitSha != latestSha)
                         {
                             var commits = await _gitService.GetCommitsAsync(repository.LocalPath, branchName, cancellationToken);
-                            var newCommits = commits.TakeWhile(sha => sha != existingBranch.LatestCommitSha).ToArray();
+                            var commitsList = commits.ToList();
+                            var oldCommitIndex = commitsList.IndexOf(existingBranch.LatestCommitSha);
+                            
+                            string[] newCommits;
+                            if (oldCommitIndex >= 0)
+                            {
+                                newCommits = commitsList.Take(oldCommitIndex).ToArray();
+                            }
+                            else
+                            {
+                                _logger.LogWarning("Previous commit {OldSha} not found in history for {Repository}/{Branch}, this may indicate a force push",
+                                    existingBranch.LatestCommitSha, repository.Name, branchName);
+                                newCommits = commitsList.Take(10).ToArray();
+                            }
 
                             if (newCommits.Length > 0)
                             {
