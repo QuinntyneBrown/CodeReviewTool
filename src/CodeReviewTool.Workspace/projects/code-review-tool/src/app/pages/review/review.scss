@@ -1,0 +1,60 @@
+.review {
+  min-height: 100vh;
+  background-color: #121212;
+  color: #e0e0e0;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #3d3d3d;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  &__back-button {
+    color: #e0e0e0;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  &__content {
+    padding: 24px;
+  }
+
+  &__loading,
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 48px;
+    min-height: 400px;
+
+    p {
+      font-size: 1rem;
+    }
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #f44336;
+    }
+  }
+
+  &__comment-section {
+    margin-top: 24px;
+    padding: 16px;
+    background-color: #1e1e1e;
+    border-radius: 4px;
+  }
+}

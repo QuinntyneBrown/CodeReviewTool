@@ -7,6 +7,9 @@
     "build": "ng build code-review-tool",
     "watch": "ng build code-review-tool --watch --configuration development",
     "test": "ng test code-review-tool",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
     "storybook": "ng run code-review-tool-components:storybook",
     "build-storybook": "ng run code-review-tool-components:build-storybook"
   },
@@ -48,6 +51,7 @@
     "@angular/compiler-cli": "^21.0.0",
     "@angular/platform-browser-dynamic": "^21.0.0",
     "@compodoc/compodoc": "^1.2.0",
+    "@playwright/test": "^1.57.0",
     "@storybook/addon-a11y": "^10.1.11",
     "@storybook/addon-docs": "^10.1.11",
     "@storybook/addon-onboarding": "^10.1.11",

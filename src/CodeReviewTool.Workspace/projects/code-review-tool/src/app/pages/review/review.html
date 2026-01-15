@@ -1,0 +1,44 @@
+<div class="review">
+  <div class="review__header">
+    <button mat-icon-button class="review__back-button" (click)="onBackHome()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="review__title">Code Review</h1>
+  </div>
+
+  <div class="review__content">
+    @if (isLoading$ | async) {
+      <div class="review__loading">
+        <mat-spinner></mat-spinner>
+        <p>Loading comparison results...</p>
+      </div>
+    } @else if (error$ | async; as error) {
+      <div class="review__error">
+        <mat-icon>error</mat-icon>
+        <p>{{ error }}</p>
+        <button mat-raised-button color="primary" (click)="onBackHome()">
+          Back to Home
+        </button>
+      </div>
+    } @else {
+      <ng-container *ngIf="comparisonResult$ | async as result">
+        <crt-diff-viewer
+          [files]="(diffFiles$ | async) || []"
+          [fromBranch]="result.fromBranch"
+          [intoBranch]="result.intoBranch">
+        </crt-diff-viewer>
+
+        @for (comment of sampleComments; track comment.commentId) {
+          <div class="review__comment-section">
+            <crt-code-comment
+              [comment]="comment"
+              [isReplyFormVisible]="false"
+              (reply)="onReply($event)"
+              (resolve)="onResolve($event)">
+            </crt-code-comment>
+          </div>
+        }
+      </ng-container>
+    }
+  </div>
+</div>
