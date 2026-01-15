@@ -5,6 +5,8 @@
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System.Threading.Channels;
+using CodeReviewTool.Shared.Messages;
+using CodeReviewTool.Shared.Messaging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using GitAnalysis.Core.Entities;
@@ -22,18 +24,21 @@ public class ComparisonProcessorService : BackgroundService
     private readonly IGitService gitService;
     private readonly IComparisonRequestRepository repository;
     private readonly IDiffResultRepository diffResultRepository;
+    private readonly IMessagePublisher messagePublisher;
     private readonly Channel<Guid> requestQueue;
 
     public ComparisonProcessorService(
         ILogger<ComparisonProcessorService> logger,
         IGitService gitService,
         IComparisonRequestRepository repository,
-        IDiffResultRepository diffResultRepository)
+        IDiffResultRepository diffResultRepository,
+        IMessagePublisher messagePublisher)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.gitService = gitService ?? throw new ArgumentNullException(nameof(gitService));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         this.diffResultRepository = diffResultRepository ?? throw new ArgumentNullException(nameof(diffResultRepository));
+        this.messagePublisher = messagePublisher ?? throw new ArgumentNullException(nameof(messagePublisher));
         this.requestQueue = Channel.CreateUnbounded<Guid>();
     }
 
@@ -61,6 +66,15 @@ public class ComparisonProcessorService : BackgroundService
                 request.Status = GitComparisonStatus.Processing;
                 await repository.UpdateAsync(request, stoppingToken);
 
+                // Publish analysis started message
+                await messagePublisher.PublishAsync(new AnalysisStartedMessage
+                {
+                    RequestId = request.RequestId.ToString(),
+                    RepositoryPath = request.RepositoryPath,
+                    FromBranch = request.FromBranch,
+                    IntoBranch = request.IntoBranch
+                }, stoppingToken);
+
                 var result = await gitService.GenerateDiffAsync(
                     request.RepositoryPath,
                     request.FromBranch,
@@ -72,6 +86,24 @@ public class ComparisonProcessorService : BackgroundService
                 request.Status = GitComparisonStatus.Completed;
                 request.CompletedAt = DateTime.UtcNow;
                 await repository.UpdateAsync(request, stoppingToken);
+
+                // Publish analysis completed message
+                await messagePublisher.PublishAsync(new AnalysisCompletedMessage
+                {
+                    RequestId = request.RequestId.ToString(),
+                    RepositoryPath = request.RepositoryPath,
+                    CompletedAt = request.CompletedAt.Value
+                }, stoppingToken);
+
+                // Publish metrics calculated message
+                await messagePublisher.PublishAsync(new AnalysisMetricsCalculatedMessage
+                {
+                    RequestId = request.RequestId.ToString(),
+                    TotalAdditions = result.TotalAdditions,
+                    TotalDeletions = result.TotalDeletions,
+                    TotalModifications = result.TotalModifications,
+                    FilesChanged = result.FileDiffs.Count
+                }, stoppingToken);
 
                 logger.LogInformation("Completed comparison request {RequestId}", requestId);
             }
@@ -86,6 +118,15 @@ public class ComparisonProcessorService : BackgroundService
                     request.ErrorMessage = ex.Message;
                     request.CompletedAt = DateTime.UtcNow;
                     await repository.UpdateAsync(request, stoppingToken);
+
+                    // Publish analysis failed message
+                    await messagePublisher.PublishAsync(new AnalysisFailedMessage
+                    {
+                        RequestId = request.RequestId.ToString(),
+                        RepositoryPath = request.RepositoryPath,
+                        ErrorMessage = ex.Message,
+                        FailedAt = request.CompletedAt.Value
+                    }, stoppingToken);
                 }
             }
         }
