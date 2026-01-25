@@ -16,7 +16,7 @@ var apiGateway = builder.AddProject<Projects.ApiGateway_ApiGateway>("apigateway"
 
 builder.AddNpmApp("code-review-tool", "../Ui")
     .WithReference(apiGateway)
-    .WithHttpEndpoint(env: "PORT", port: 4200)
+    .WithHttpEndpoint(targetPort: 4200)
     .WithExternalHttpEndpoints();
 
 builder.Build().Run();

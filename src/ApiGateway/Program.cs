@@ -14,9 +14,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add Yarp reverse proxy
+// Add Yarp reverse proxy with service discovery
 builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddServiceDiscoveryDestinationResolver();
 
 var app = builder.Build();
 
