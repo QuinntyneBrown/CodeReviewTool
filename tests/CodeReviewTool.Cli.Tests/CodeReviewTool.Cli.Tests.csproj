@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/CodeReviewTool.Cli/CodeReviewTool.Cli.csproj" />
+    <ProjectReference Include="../../src/Cli/Cli.csproj" />
     <ProjectReference Include="../../src/GitAnalysis/src/GitAnalysis.Core/GitAnalysis.Core.csproj" />
   </ItemGroup>
 

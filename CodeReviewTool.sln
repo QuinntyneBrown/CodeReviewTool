@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealtimeNotification.Api.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeReviewTool.Tests", "tests\CodeReviewTool.Tests\CodeReviewTool.Tests.csproj", "{F56B61C6-B990-48A6-96C7-4315896E59F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeReviewTool.Cli", "src\CodeReviewTool.Cli\CodeReviewTool.Cli.csproj", "{AAF239DB-8036-4159-ACF0-5A0246E62E3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cli", "src\Cli\Cli.csproj", "{AAF239DB-8036-4159-ACF0-5A0246E62E3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeReviewTool.Cli.Tests", "tests\CodeReviewTool.Cli.Tests\CodeReviewTool.Cli.Tests.csproj", "{084682A4-6A3F-4E7E-914B-4E30B38D8F79}"
 EndProject
@@ -76,6 +76,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReportingService", "ReportingService", "{DB912A18-BAA6-C107-B61E-DE94A2885DEB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingService.Core.Tests", "tests\ReportingService\ReportingService.Core.Tests\ReportingService.Core.Tests.csproj", "{959E6FB9-C086-46D0-8E4D-1B58AD6F653F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeReviewTool.ServiceDefaults", "src\CodeReviewTool.ServiceDefaults\CodeReviewTool.ServiceDefaults.csproj", "{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeReviewTool.AppHost", "src\CodeReviewTool.AppHost\CodeReviewTool.AppHost.csproj", "{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingService.Infrastructure.Tests", "tests\ReportingService\ReportingService.Infrastructure.Tests\ReportingService.Infrastructure.Tests.csproj", "{794FC37B-0AB7-47FA-BF39-9580C3F647DD}"
 EndProject
@@ -415,6 +419,30 @@ Global
 		{E3512ED5-332F-4D9E-9910-70E56B84701E}.Release|x64.Build.0 = Release|Any CPU
 		{E3512ED5-332F-4D9E-9910-70E56B84701E}.Release|x86.ActiveCfg = Release|Any CPU
 		{E3512ED5-332F-4D9E-9910-70E56B84701E}.Release|x86.Build.0 = Release|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Debug|x64.Build.0 = Debug|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Debug|x86.Build.0 = Debug|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Release|x64.ActiveCfg = Release|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Release|x64.Build.0 = Release|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Release|x86.ActiveCfg = Release|Any CPU
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6}.Release|x86.Build.0 = Release|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Debug|x64.Build.0 = Debug|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Debug|x86.Build.0 = Debug|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Release|x64.ActiveCfg = Release|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Release|x64.Build.0 = Release|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Release|x86.ActiveCfg = Release|Any CPU
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -457,5 +485,7 @@ Global
 		{959E6FB9-C086-46D0-8E4D-1B58AD6F653F} = {DB912A18-BAA6-C107-B61E-DE94A2885DEB}
 		{794FC37B-0AB7-47FA-BF39-9580C3F647DD} = {DB912A18-BAA6-C107-B61E-DE94A2885DEB}
 		{E3512ED5-332F-4D9E-9910-70E56B84701E} = {DB912A18-BAA6-C107-B61E-DE94A2885DEB}
+		{E1A2B3C4-D5E6-F7A8-B9C0-D1E2F3A4B5C6} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
+		{F2B3C4D5-E6F7-A8B9-C0D1-E2F3A4B5C6D7} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 	EndGlobalSection
 EndGlobal

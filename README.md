@@ -31,7 +31,7 @@ The application follows a microservices architecture with an API Gateway pattern
    - Endpoints: `/api/repositories/*`
    - Runs on `http://localhost:5003` (development)
 
-5. **Frontend** (`src/CodeReviewTool.Workspace`)
+5. **Frontend** (`src/Ui`)
    - Angular-based user interface
    - Communicates exclusively through the API Gateway
    - Runs on `http://localhost:4200` (development)
@@ -123,7 +123,7 @@ dotnet run
 
 ```bash
 # Terminal 5: Angular Frontend
-cd src/CodeReviewTool.Workspace
+cd src/Ui
 npm install
 npm start
 ```
@@ -249,7 +249,7 @@ CodeReviewTool/
 │   ├── GitAnalysis/                   # Git analysis microservice
 │   ├── RealtimeNotification/          # Notification microservice
 │   ├── RepositoryService/             # Repository management microservice
-│   ├── CodeReviewTool.Workspace/      # Angular frontend
+│   ├── Ui/                            # Angular frontend
 │   └── CodeReviewTool.Cli/            # CLI tool
 ├── tests/
 │   ├── ApiGateway.Tests/              # API Gateway tests

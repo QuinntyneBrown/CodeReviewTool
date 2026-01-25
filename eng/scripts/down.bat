@@ -20,7 +20,7 @@ for /f "tokens=2" %%a in ('tasklist /FI "IMAGENAME eq dotnet.exe" /FO LIST ^| fi
 
 echo Stopping Angular dev server (node processes)...
 for /f "tokens=2" %%a in ('tasklist /FI "IMAGENAME eq node.exe" /FO LIST ^| find "PID:"') do (
-    wmic process where "ProcessId=%%a" get CommandLine 2>nul | findstr /i "CodeReviewTool.Workspace" >nul && taskkill /PID %%a /F >nul 2>&1
+    wmic process where "ProcessId=%%a" get CommandLine 2>nul | findstr /i "\src\Ui" >nul && taskkill /PID %%a /F >nul 2>&1
 )
 
 echo All applications stopped.

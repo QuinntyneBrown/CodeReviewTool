@@ -22,5 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RealtimeNotification.Infrastructure\RealtimeNotification.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\CodeReviewTool.ServiceDefaults\CodeReviewTool.ServiceDefaults.csproj" />
   </ItemGroup>
 </Project>

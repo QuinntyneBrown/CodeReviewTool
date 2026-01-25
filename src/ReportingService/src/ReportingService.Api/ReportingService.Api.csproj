@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ReportingService.Infrastructure\ReportingService.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\CodeReviewTool.ServiceDefaults\CodeReviewTool.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

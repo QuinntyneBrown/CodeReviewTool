@@ -21,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitAnalysis.Infrastructure\GitAnalysis.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\CodeReviewTool.ServiceDefaults\CodeReviewTool.ServiceDefaults.csproj" />
   </ItemGroup>
 </Project>

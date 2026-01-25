@@ -1,5 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
@@ -17,6 +19,8 @@ builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseCors();
 
